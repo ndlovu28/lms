@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\SchoolFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class School extends Model
 {
-    /** @use HasFactory<\Database\Factories\SchoolFactory> */
+    /** @use HasFactory<SchoolFactory> */
     use HasFactory;
 
     /**
@@ -21,6 +22,7 @@ class School extends Model
         'slug',
         'description',
         'logo_url',
+        'banner_url',
         'is_active',
     ];
 

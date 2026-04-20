@@ -1,132 +1,165 @@
-<div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-1">Users</h1>
-            <small class="text-muted">Manage users for your school.</small>
-        </div>
+<div>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
+        <h3 class="mb-0">Users</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb align-items-center mb-0 lh-1">
+                <li class="breadcrumb-item">
+                    <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none">
+                        <i class="ri-home-8-line fs-15 text-primary me-1"></i>
+                        <span class="text-body fs-14 hover">Dashboard</span>
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <span class="text-secondary">User Management</span>
+                </li>
+            </ol>
+        </nav>
     </div>
 
     @if (session()->has('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
             {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <button
-                type="button"
-                class="nav-link {{ $tab === 'all' ? 'active' : '' }}"
-                wire:click="setTab('all')"
-            >
-                All users
-            </button>
-        </li>
-        <li class="nav-item">
-            <button
-                type="button"
-                class="nav-link {{ $tab === 'pending' ? 'active' : '' }}"
-                wire:click="setTab('pending')"
-            >
-                Pending tutors
-            </button>
-        </li>
-        <li class="nav-item">
-            <button
-                type="button"
-                class="nav-link {{ $tab === 'tutors' ? 'active' : '' }}"
-                wire:click="setTab('tutors')"
-            >
-                Tutors
-            </button>
-        </li>
-        <li class="nav-item">
-            <button
-                type="button"
-                class="nav-link {{ $tab === 'students' ? 'active' : '' }}"
-                wire:click="setTab('students')"
-            >
-                Students
-            </button>
-        </li>
-    </ul>
-
-    <div class="card">
-        <div class="card-header">
-            @if($tab === 'pending')
-                Pending tutors
-            @elseif($tab === 'tutors')
-                Tutors
-            @elseif($tab === 'students')
-                Students
-            @else
-                All users
-            @endif
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card bg-white border border-white rounded-10 mb-4">
+                <div class="card-body">
+                    <ul class="nav nav-tabs border-0 gap-3">
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link border-0 rounded-pill px-4 py-2 {{ $tab === 'all' ? 'active bg-primary text-white' : 'text-body bg-light' }}"
+                                wire:click="setTab('all')"
+                            >
+                                All users
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link border-0 rounded-pill px-4 py-2 {{ $tab === 'pending' ? 'active bg-primary text-white' : 'text-body bg-light' }}"
+                                wire:click="setTab('pending')"
+                            >
+                                Pending tutors
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link border-0 rounded-pill px-4 py-2 {{ $tab === 'tutors' ? 'active bg-primary text-white' : 'text-body bg-light' }}"
+                                wire:click="setTab('tutors')"
+                            >
+                                Tutors
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link border-0 rounded-pill px-4 py-2 {{ $tab === 'students' ? 'active bg-primary text-white' : 'text-body bg-light' }}"
+                                wire:click="setTab('students')"
+                            >
+                                Students
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="card bg-white border border-white rounded-10">
         <div class="card-body p-0">
             @if($users->isEmpty())
-                <p class="text-muted p-3 mb-0">
-                    No users found for this view.
-                </p>
+                <div class="p-5 text-center">
+                    <i class="ri-user-search-line fs-48 text-light mb-3 d-block"></i>
+                    <p class="text-muted mb-0">No users found for this view.</p>
+                </div>
             @else
-                <div class="list-group list-group-flush">
-                    @foreach($users as $user)
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="me-3">
-                                <div class="fw-semibold">
-                                    {{ $user->name }} {{ $user->surname }}
-                                    @if($user->status === 0)
-                                        <span class="badge bg-secondary ms-2">Disabled</span>
-                                    @endif
-                                </div>
-                                <div class="small text-muted">
-                                    {{ $user->email }}
-                                </div>
-                                <div class="small text-muted">
-                                    Role: {{ $user->role?->name ?? 'N/A' }}
-                                    @if($user->role?->name === 'tutor')
-                                        @if($user->tutor_approved)
-                                            <span class="badge bg-success ms-1">Approved</span>
-                                        @else
-                                            <span class="badge bg-warning text-dark ms-1">Pending</span>
-                                        @endif
-                                    @endif
-                                </div>
-                            </div>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4 py-3 text-body fw-medium">User Details</th>
+                                <th class="py-3 text-body fw-medium">Role & Status</th>
+                                <th class="pe-4 py-3 text-end text-body fw-medium">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($users as $user)
+                                <tr>
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                                <i class="ri-user-line fs-20 text-secondary"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold text-secondary fs-15">
+                                                    {{ $user->name }} {{ $user->surname }}
+                                                </div>
+                                                <div class="small text-muted">
+                                                    {{ $user->email }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-3">
+                                        <div class="d-flex flex-column gap-1">
+                                            <span class="text-uppercase small fw-bold text-muted">Role: {{ $user->role?->name ?? 'N/A' }}</span>
+                                            <div class="d-flex gap-2">
+                                                @if($user->status === 0)
+                                                    <span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1 rounded">Disabled</span>
+                                                @else
+                                                    <span class="badge bg-success bg-opacity-10 text-success px-2 py-1 rounded">Active</span>
+                                                @endif
 
-                            <div class="btn-group btn-group-sm" role="group">
-                                <button
-                                    type="button"
-                                    class="btn {{ $user->status === 1 ? 'btn-outline-danger' : 'btn-outline-success' }}"
-                                    wire:click="toggleUserStatus({{ $user->id }})"
-                                >
-                                    {{ $user->status === 1 ? 'Disable' : 'Enable' }}
-                                </button>
-                                
-                                @if($user->role?->name === 'tutor')
-                                    <button
-                                        type="button"
-                                        class="btn {{ $user->tutor_approved ? 'btn-outline-warning' : 'btn-outline-success' }}"
-                                        wire:click="toggleTutorApproval({{ $user->id }})"
-                                    >
-                                        {{ $user->tutor_approved ? 'Revoke Approval' : 'Approve' }}
-                                    </button>
-                                @endif
-
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-primary"
-                                    wire:click="openAssignCourses({{ $user->id }})"
-                                >
-                                    Assign courses
-                                </button>
-                                <a href="{{ route('admin.profile', $user->id) }}" class="btn btn-outline-dark">
-                                    Edit
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
+                                                @if($user->role?->name === 'tutor')
+                                                    @if($user->tutor_approved)
+                                                        <span class="badge bg-info bg-opacity-10 text-info px-2 py-1 rounded">Approved</span>
+                                                    @else
+                                                        <span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1 rounded">Pending</span>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="pe-4 py-3 text-end">
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-light btn-sm dropdown-toggle border" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ri-settings-3-line"></i> Manage
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 p-2">
+                                                <li>
+                                                    <button class="dropdown-item rounded mb-1" type="button" wire:click="toggleUserStatus({{ $user->id }})">
+                                                        <i class="ri-user-follow-line me-2"></i> {{ $user->status === 1 ? 'Disable Account' : 'Enable Account' }}
+                                                    </button>
+                                                </li>
+                                                @if($user->role?->name === 'tutor')
+                                                    <li>
+                                                        <button class="dropdown-item rounded mb-1" type="button" wire:click="toggleTutorApproval({{ $user->id }})">
+                                                            <i class="ri-checkbox-circle-line me-2"></i> {{ $user->tutor_approved ? 'Revoke Approval' : 'Approve Tutor' }}
+                                                        </button>
+                                                    </li>
+                                                @endif
+                                                <li>
+                                                    <button class="dropdown-item rounded mb-1" type="button" wire:click="openAssignCourses({{ $user->id }})">
+                                                        <i class="ri-book-open-line me-2"></i> Assign Courses
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item rounded" href="{{ route('admin.profile', $user->id) }}">
+                                                        <i class="ri-edit-line me-2"></i> Edit Details
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             @endif
         </div>

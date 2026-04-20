@@ -1,45 +1,62 @@
-<div class="container py-5">
-    <div class="mb-4">
-        <h1 class="h3 mb-1">Review Quizzes</h1>
-        <p class="text-muted">Overview of all quizzes and student performance.</p>
+<div>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
+        <h3 class="mb-0">Review Quizzes</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb align-items-center mb-0 lh-1">
+                <li class="breadcrumb-item">
+                    <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none">
+                        <i class="ri-home-8-line fs-15 text-primary me-1"></i>
+                        <span class="text-body fs-14 hover">Dashboard</span>
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <span class="text-secondary">Quiz Performance Overview</span>
+                </li>
+            </ol>
+        </nav>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-white py-3">
-            <h5 class="mb-0">Quizzes</h5>
-        </div>
+    <div class="card bg-white border border-white rounded-10">
         <div class="card-body p-0">
+            <div class="p-4 border-bottom">
+                <h3 class="fs-18 fw-medium mb-0">Quizzes</h3>
+            </div>
             @if($quizzes->isEmpty())
-                <p class="text-muted p-4 mb-0 text-center">No quizzes have been created yet.</p>
+                <div class="p-5 text-center">
+                    <i class="ri-questionnaire-line fs-48 text-light mb-3 d-block"></i>
+                    <p class="text-muted mb-0">No quizzes have been created yet.</p>
+                </div>
             @else
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead>
+                    <table class="table align-middle mb-0">
+                        <thead class="bg-light">
                             <tr>
-                                <th>Quiz Name</th>
-                                <th>Course</th>
-                                <th class="text-center">Questions</th>
-                                <th class="text-center">Completions</th>
-                                <th class="text-end">Action</th>
+                                <th class="ps-4 py-3 text-body fw-medium">Quiz Name</th>
+                                <th class="py-3 text-body fw-medium">Course</th>
+                                <th class="py-3 text-body fw-medium text-center">Questions</th>
+                                <th class="py-3 text-body fw-medium text-center">Completions</th>
+                                <th class="pe-4 py-3 text-end text-body fw-medium">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($quizzes as $quiz)
                                 <tr>
-                                    <td>
-                                        <div class="fw-bold">{{ $quiz->name }}</div>
-                                        <small class="text-muted">Created: {{ $quiz->created_at->format('M d, Y') }}</small>
+                                    <td class="ps-4 py-3">
+                                        <div class="fw-semibold text-secondary fs-15">{{ $quiz->name }}</div>
+                                        <small class="text-muted"><i class="ri-calendar-line me-1"></i>Created: {{ $quiz->created_at->format('M d, Y') }}</small>
                                     </td>
-                                    <td>{{ $quiz->course->name }}</td>
-                                    <td class="text-center">
-                                        <span class="badge bg-light text-dark border">{{ $quiz->questions_count }}</span>
+                                    <td class="py-3">
+                                        <span class="text-body">{{ $quiz->course->name }}</span>
                                     </td>
-                                    <td class="text-center">
-                                        <span class="badge bg-primary">{{ $quiz->attempts_count }}</span>
+                                    <td class="py-3 text-center">
+                                        <span class="badge bg-light text-body border px-2 py-1">{{ $quiz->questions_count }}</span>
                                     </td>
-                                    <td class="text-end">
-                                        <a href="{{ route('tutor.quiz-attempts', $quiz->id) }}" class="btn btn-sm btn-outline-primary">
-                                            View Results
+                                    <td class="py-3 text-center">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">{{ $quiz->attempts_count }}</span>
+                                    </td>
+                                    <td class="pe-4 py-3 text-end">
+                                        <a href="{{ route('tutor.quiz-attempts', $quiz->id) }}" class="btn btn-outline-primary btn-sm px-3">
+                                            <i class="ri-eye-line me-1"></i> View Results
                                         </a>
                                     </td>
                                 </tr>
@@ -47,9 +64,11 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="px-4 py-3">
-                    {{ $quizzes->links() }}
-                </div>
+                @if($quizzes->hasPages())
+                    <div class="px-4 py-3 border-top">
+                        {{ $quizzes->links() }}
+                    </div>
+                @endif
             @endif
         </div>
     </div>

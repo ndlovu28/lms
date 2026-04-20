@@ -1,29 +1,31 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\AdminCourses;
+use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\AdminPhase;
 use App\Livewire\Admin\AdminUsers;
 use App\Livewire\Admin\SchoolInfo;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
+use App\Livewire\Shared\Profile;
+use App\Livewire\Student\StudentAssignments;
 use App\Livewire\Student\StudentDashboard;
 use App\Livewire\Student\TakeQuiz;
+use App\Livewire\Student\ViewLearningMaterials;
+use App\Livewire\Su\ManageSchool;
 use App\Livewire\Su\SuDashboard;
+use App\Livewire\Su\SuStats;
+use App\Livewire\Tutor\CreateQuiz;
+use App\Livewire\Tutor\ManageAssignments;
+use App\Livewire\Tutor\ManageLearningMaterials;
+use App\Livewire\Tutor\QuizAttempts;
+use App\Livewire\Tutor\ReviewAttempt;
+use App\Livewire\Tutor\ReviewQuizzes;
+use App\Livewire\Tutor\ReviewSubmissions;
 use App\Livewire\Tutor\TutorCourses;
 use App\Livewire\Tutor\TutorDashboard;
 use App\Livewire\Tutor\TutorStudents;
-use App\Livewire\Tutor\CreateQuiz;
-use App\Livewire\Tutor\ReviewQuizzes;
-use App\Livewire\Tutor\QuizAttempts;
-use App\Livewire\Tutor\ReviewAttempt;
-use App\Livewire\Tutor\ManageLearningMaterials;
-use App\Livewire\Tutor\ManageAssignments;
-use App\Livewire\Tutor\ReviewSubmissions;
-use App\Livewire\Shared\Profile;
-use App\Livewire\Student\ViewLearningMaterials;
-use App\Livewire\Student\StudentAssignments;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,7 +45,13 @@ Route::middleware(['auth', 'super'])
     ->group(function (): void {
         Route::livewire('/dashboard', SuDashboard::class)
             ->name('su.dashboard');
-        
+
+        Route::livewire('/school/{school}', ManageSchool::class)
+            ->name('su.manage-school');
+
+        Route::livewire('/stats', SuStats::class)
+            ->name('su.stats');
+
         Route::livewire('/profile', Profile::class)
             ->name('su.profile');
     });
@@ -75,7 +83,7 @@ Route::middleware(['auth', 'tutor'])
     ->group(function (): void {
         Route::livewire('/dashboard', TutorDashboard::class)
             ->name('tutor.dashboard');
-        
+
         Route::livewire('/profile', Profile::class)
             ->name('tutor.profile');
 
@@ -109,14 +117,14 @@ Route::middleware(['auth', 'tutor'])
 
 Route::middleware(['auth', 'student'])
     ->prefix('student')
-        ->group(function (): void {
-            Route::livewire('/dashboard', StudentDashboard::class)
-                ->name('student.dashboard');
-    
-            Route::livewire('/profile', Profile::class)
-                ->name('student.profile');
-    
-            Route::livewire('/quiz/{quiz}', TakeQuiz::class)            ->name('student.take-quiz');
+    ->group(function (): void {
+        Route::livewire('/dashboard', StudentDashboard::class)
+            ->name('student.dashboard');
+
+        Route::livewire('/profile', Profile::class)
+            ->name('student.profile');
+
+        Route::livewire('/quiz/{quiz}', TakeQuiz::class)->name('student.take-quiz');
 
         Route::livewire('/materials/{course}', ViewLearningMaterials::class)
             ->name('student.view-materials');

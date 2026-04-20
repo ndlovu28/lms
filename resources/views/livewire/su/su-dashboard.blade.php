@@ -10,256 +10,93 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    <span>School</span>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">
-                    <span class="text-secondary">School List</span>
+                    <span class="text-secondary">School Management</span>
                 </li>
             </ol>
         </nav>
     </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="card bg-white border border-white rounded-10 mb-4">
                 <div class="card-body">
-                    <div class="d-flex">
-                        <h3 class="fs-18 fw-medium">Schools</h3>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <h3 class="fs-18 fw-medium mb-0"><i class="ri-school-line me-2 text-primary"></i>Registered Schools</h3>
                         <div class="ms-auto">
-                            <a href="#" class="btn btn-primary btn-sm" wire:click.prevent="openCreateSchoolModal">+ Add School</a>
+                            <a href="{{ route('su.manage-school', 'new') }}" class="btn btn-primary btn-sm px-3" wire:navigate>
+                                <i class="ri-add-line me-1"></i> Add School
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row g-3">
-            @forelse($schools as $school)
-                <div class="col-md-4">
-                    <div class="card h-100">
-                        @if($school->logo_url)
-                            <img src="{{ $school->logo_url }}" class="card-img-top" alt="{{ $school->name }} logo" style="object-fit: contain; height: 160px;">
+
+    <div class="row g-4">
+        @forelse($schools as $school)
+            <div class="col-sm-6 col-lg-4">
+                <div class="card bg-white border border-white rounded-10 h-100 shadow-none hover-shadow transition">
+                    <div class="position-relative">
+                        @if($school->banner_url)
+                            <img src="{{ $school->banner_url }}" class="card-img-top rounded-top-10" alt="{{ $school->name }} banner" style="height: 120px; object-fit: cover;">
+                        @else
+                            <div class="bg-light rounded-top-10 d-flex align-items-center justify-content-center" style="height: 120px;">
+                                <i class="ri-image-line fs-32 text-muted opacity-50"></i>
+                            </div>
                         @endif
-
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title mb-1">{{ $school->name }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Identifier: {{ $school->slug }}</h6>
-                            <p class="card-text small text-muted mb-2">
-                                {{ $school->description ?: 'No description provided.' }}
-                            </p>
-
-                            <span class="badge {{ $school->is_active ? 'bg-success' : 'bg-secondary' }} mb-3 align-self-start">
-                                {{ $school->is_active ? 'Active' : 'Inactive' }}
-                            </span>
-
-                            <div class="mt-auto">
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-outline-primary"
-                                    wire:click="openEditSchoolModal({{ $school->id }})"
-                                >
-                                    Edit school
-                                </button>
+                        
+                        <div class="position-absolute start-50 translate-middle" style="top: 100%;">
+                            <div class="bg-white p-1 rounded-circle shadow-sm">
+                                @if($school->logo_url)
+                                    <img src="{{ $school->logo_url }}" class="rounded-circle" alt="{{ $school->name }} logo" style="width: 70px; height: 70px; object-fit: contain; background: white;">
+                                @else
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                                        <i class="ri-school-line fs-24"></i>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
-                </div>
-            @empty
-                <div class="col-12">
-                    <div class="alert alert-info mb-0">
-                        No schools have been created yet. Click <strong>“Create School”</strong> to add the first one.
+
+                    <div class="card-body d-flex flex-column pt-5 text-center">
+                        <h5 class="card-title mb-1 fs-18 fw-bold text-secondary mt-2">{{ $school->name }}</h5>
+                        <p class="text-muted small mb-3">ID: {{ $school->slug }}</p>
+                        
+                        <div class="mb-3">
+                            @if($school->is_active)
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill"><i class="ri-checkbox-circle-line me-1"></i>Active</span>
+                            @else
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill"><i class="ri-close-circle-line me-1"></i>Inactive</span>
+                            @endif
+                        </div>
+
+                        <p class="card-text text-body small mb-4 line-clamp-2" style="min-height: 40px;">
+                            {{ $school->description ?: 'No description provided for this school.' }}
+                        </p>
+
+                        <div class="mt-auto">
+                            <a
+                                href="{{ route('su.manage-school', $school->id) }}"
+                                class="btn btn-outline-primary btn-sm w-100 rounded-10 py-2"
+                                wire:navigate
+                            >
+                                <i class="ri-settings-4-line me-1"></i> Manage School
+                            </a>
+                        </div>
                     </div>
-                </div>
-            @endforelse
-        </div>
-    </div>
-    @if($showSchoolModal)
-    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        {{ $editingSchoolId ? 'Edit school' : 'Create school' }}
-                    </h5>
-                    <button type="button" class="btn-close" aria-label="Close" wire:click="closeSchoolModal"></button>
-                </div>
-                <form wire:submit.prevent="saveSchool" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <h6 class="mb-2">School details</h6>
-                                <div class="mb-3">
-                                    <label class="form-label" for="schoolName">Name</label>
-                                    <input id="schoolName" type="text" class="form-control @error('schoolName') is-invalid @enderror" wire:model.live="schoolName">
-                                    @error('schoolName')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label" for="schoolSlug">Identifier (slug)</label>
-                                    <input id="schoolSlug" type="text" class="form-control @error('schoolSlug') is-invalid @enderror" wire:model.live="schoolSlug">
-                                    @error('schoolSlug')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label" for="schoolDescription">Description</label>
-                                    <textarea id="schoolDescription" class="form-control @error('schoolDescription') is-invalid @enderror" rows="3" wire:model.live="schoolDescription"></textarea>
-                                    @error('schoolDescription')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                    <div class="form-check mb-3">
-                                        <input
-                                            id="schoolIsActive"
-                                            type="checkbox"
-                                            class="form-check-input @error('schoolIsActive') is-invalid @enderror"
-                                            wire:model.live="schoolIsActive"
-                                        >
-                                        <label class="form-check-label" for="schoolIsActive">
-                                            Active
-                                        </label>
-                                        @error('schoolIsActive')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <h6 class="mb-2">School logo</h6>
-
-                                    <div class="mb-3">
-                                        <input
-                                            type="file"
-                                            class="form-control @error('schoolLogo') is-invalid @enderror"
-                                            wire:model="schoolLogo"
-                                            accept="image/*"
-                                        >
-                                        @error('schoolLogo')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        @if($schoolLogo)
-                                            <p class="small text-muted mb-1">Preview:</p>
-                                            <img
-                                                src="{{ $schoolLogo->temporaryUrl() }}"
-                                                alt="Logo preview"
-                                                class="img-fluid rounded border"
-                                                style="max-height: 160px; object-fit: cover;"
-                                            >
-                                        @elseif($existingLogoUrl)
-                                            <p class="small text-muted mb-1">Current logo:</p>
-                                            <img
-                                                src="{{ $existingLogoUrl }}"
-                                                alt="Current logo"
-                                                class="img-fluid rounded border"
-                                                style="max-height: 160px; object-fit: cover;"
-                                            >
-                                        @else
-                                            <p class="text-muted small mb-0">No logo uploaded.</p>
-                                        @endif
-                                    </div>
-
-                                    <hr>
-
-                                    <h6 class="mb-2">Admin user</h6>
-
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adminName">First name</label>
-                                        <input
-                                            id="adminName"
-                                            type="text"
-                                            class="form-control @error('adminName') is-invalid @enderror"
-                                            wire:model.live="adminName"
-                                        >
-                                        @error('adminName')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adminSurname">Surname</label>
-                                        <input
-                                            id="adminSurname"
-                                            type="text"
-                                            class="form-control @error('adminSurname') is-invalid @enderror"
-                                            wire:model.live="adminSurname"
-                                        >
-                                        @error('adminSurname')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adminEmail">Email</label>
-                                        <input
-                                            id="adminEmail"
-                                            type="email"
-                                            class="form-control @error('adminEmail') is-invalid @enderror"
-                                            wire:model.live="adminEmail"
-                                        >
-                                        @error('adminEmail')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adminPassword">
-                                            Password
-                                            @if($editingSchoolId)
-                                                <small class="text-muted">(leave blank to keep existing)</small>
-                                            @endif
-                                        </label>
-                                        <input
-                                            id="adminPassword"
-                                            type="password"
-                                            class="form-control @error('adminPassword') is-invalid @enderror"
-                                            wire:model="adminPassword"
-                                        >
-                                        @error('adminPassword')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adminPasswordConfirmation">Confirm password</label>
-                                        <input
-                                            id="adminPasswordConfirmation"
-                                            type="password"
-                                            class="form-control @error('adminPasswordConfirmation') is-invalid @enderror"
-                                            wire:model="adminPasswordConfirmation"
-                                        >
-                                        @error('adminPasswordConfirmation')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-secondary"
-                                wire:click="closeSchoolModal"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                class="btn btn-primary"
-                            >
-                                Save school
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
-        </div>
-    @endif
-
-
+        @empty
+            <div class="col-12">
+                <div class="card bg-white border border-white rounded-10 text-center py-5">
+                    <div class="card-body">
+                        <i class="ri-school-line fs-48 text-light mb-3 d-block"></i>
+                        <h5 class="text-secondary">No schools found</h5>
+                        <p class="text-muted mb-0">Click the <strong>Add School</strong> button to register your first institution.</p>
+                    </div>
+                </div>
+            </div>
+        @endforelse
+    </div>
 </div>

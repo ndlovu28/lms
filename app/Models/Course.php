@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use Database\Factories\CourseFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
 {
+    /** @use HasFactory<CourseFactory> */
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -41,17 +47,17 @@ class Course extends Model
         return $this->belongsToMany(User::class);
     }
 
-    public function quizzes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function quizzes(): HasMany
     {
         return $this->hasMany(Quiz::class);
     }
 
-    public function learningMaterials(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function learningMaterials(): HasMany
     {
         return $this->hasMany(LearningMaterial::class);
     }
 
-    public function assignments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function assignments(): HasMany
     {
         return $this->hasMany(Assignment::class);
     }

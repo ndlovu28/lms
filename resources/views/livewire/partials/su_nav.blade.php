@@ -4,9 +4,15 @@
             <span class="menu-title-text">MAIN</span>
         </li>
         <li class="menu-item">
-            <a href="{{ url('su/dashboard') }}" class="menu-link active">
-                <span class="material-symbols-outlined menu-icon">dashboard</span>
+            <a href="{{ route('su.dashboard') }}" class="menu-link {{ Request::routeIs('su.dashboard') ? 'active' : '' }}">
+                <i class="ri-dashboard-line menu-icon"></i>
                 <span class="title">Dashboard</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="{{ route('su.stats') }}" class="menu-link {{ Request::routeIs('su.stats') ? 'active' : '' }}">
+                <i class="ri-bar-chart-box-line menu-icon"></i>
+                <span class="title">Statistics</span>
             </a>
         </li>
     </ul>
