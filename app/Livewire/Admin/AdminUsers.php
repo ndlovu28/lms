@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Course;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -12,6 +13,18 @@ class AdminUsers extends Component
     public string $tab = 'all';
 
     public bool $showAssignCoursesModal = false;
+
+    public bool $showCreateUserModal = false;
+
+    public string $name = '';
+
+    public string $surname = '';
+
+    public string $email = '';
+
+    public string $password = '';
+
+    public ?int $role_id = null;
 
     public ?int $assignUserId = null;
 
@@ -63,7 +76,46 @@ class AdminUsers extends Component
         return view('livewire.admin.admin-users', [
             'users' => $users,
             'coursesForAssign' => $coursesForAssign,
+            'roles' => Role::where('name', '!=', 'su')->get(),
         ]);
+    }
+
+    public function openCreateUserModal(): void
+    {
+        $this->reset(['name', 'surname', 'email', 'password', 'role_id']);
+        $this->showCreateUserModal = true;
+    }
+
+    public function closeCreateUserModal(): void
+    {
+        $this->showCreateUserModal = false;
+    }
+
+    public function createUser(): void
+    {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+            'role_id' => 'required|exists:roles,id',
+        ]);
+
+        $user = User::create([
+            'name' => $this->name,
+            'surname' => $this->surname,
+            'email' => $this->email,
+            'password' => $this->password,
+            'role_id' => $this->role_id,
+            'school_id' => $this->currentSchoolId(),
+            'status' => 1,
+            'tutor_approved' => true, // Auto-approve if created by admin
+        ]);
+
+        $this->showCreateUserModal = false;
+        $this->reset(['name', 'surname', 'email', 'password', 'role_id']);
+
+        session()->flash('success', 'User created successfully.');
     }
 
     public function setTab(string $tab): void

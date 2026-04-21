@@ -12,7 +12,7 @@ class StudentDashboard extends Component
         $student = Auth::user();
 
         $courses = $student->courses()
-            ->with(['phase', 'tutor', 'quizzes.questions'])
+            ->with(['phase', 'tutor', 'quizzes.questions', 'activeSession'])
             ->get();
 
         $attempts = $student->quizAttempts()

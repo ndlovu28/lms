@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect('/auth/login');
-});
+})->name('login');
 
 Route::get('auth/logout', [AuthController::class, 'logout']);
 

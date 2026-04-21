@@ -51,7 +51,12 @@
                             <span class="small text-muted"><i class="ri-user-star-line me-1"></i>Tutor: {{ $course->tutor?->name ?? 'N/A' }} {{ $course->tutor?->surname ?? '' }}</span>
                         </div>
                     </div>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 flex-wrap">
+                        @if($course->activeSession)
+                            <a href="{{ $course->activeSession->join_url }}" target="_blank" class="btn btn-success btn-sm px-3">
+                                <i class="ri-video-chat-line me-1"></i> Join Live Session
+                            </a>
+                        @endif
                         <a href="{{ route('student.view-materials', $course->id) }}" class="btn btn-primary btn-sm px-3">
                             <i class="ri-book-open-line me-1"></i> Study Materials
                         </a>

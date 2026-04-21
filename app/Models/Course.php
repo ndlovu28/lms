@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Course extends Model
 {
@@ -60,5 +61,15 @@ class Course extends Model
     public function assignments(): HasMany
     {
         return $this->hasMany(Assignment::class);
+    }
+
+    public function liveSessions(): HasMany
+    {
+        return $this->hasMany(LiveSession::class);
+    }
+
+    public function activeSession(): HasOne
+    {
+        return $this->hasOne(LiveSession::class)->where('is_active', true);
     }
 }

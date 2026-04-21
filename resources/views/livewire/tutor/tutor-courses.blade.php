@@ -16,6 +16,20 @@
         </nav>
     </div>
 
+    @if (session()->has('error'))
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="card bg-white border border-white rounded-10">
         <div class="card-body p-0">
             <div class="p-4 border-bottom">
@@ -52,11 +66,29 @@
                                         <span class="fw-medium text-body">{{ $course->students_count }}</span>
                                     </td>
                                     <td class="pe-4 py-3 text-end">
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="{{ route('tutor.manage-materials', $course->id) }}" class="btn btn-outline-primary btn-sm px-3">
+                                        <div class="d-flex justify-content-end gap-2 flex-wrap">
+                                            @if($course->activeSession)
+                                                <a href="{{ $course->activeSession->start_url }}" target="_blank" class="btn btn-primary btn-sm px-3">
+                                                    <i class="ri-video-chat-line me-1"></i> Join Session
+                                                </a>
+                                                <button wire:click="endLiveSession({{ $course->id }})" class="btn btn-danger btn-sm px-3">
+                                                    <i class="ri-stop-circle-line me-1"></i> End Session
+                                                </button>
+                                            @else
+                                                <button wire:click="startLiveSession({{ $course->id }})" class="btn btn-outline-info btn-sm px-3" wire:loading.attr="disabled">
+                                                    <span wire:loading.remove wire:target="startLiveSession({{ $course->id }})">
+                                                        <i class="ri-vidicon-line me-1"></i> Start Session
+                                                    </span>
+                                                    <span wire:loading wire:target="startLiveSession({{ $course->id }})">
+                                                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                                        Starting...
+                                                    </span>
+                                                </button>
+                                            @endif
+                                            <a href="{{ route('tutor.materials', ['course_id' => $course->id]) }}" class="btn btn-outline-primary btn-sm px-3">
                                                 <i class="ri-book-open-line me-1"></i> Materials
                                             </a>
-                                            <a href="{{ route('tutor.manage-assignments', $course->id) }}" class="btn btn-outline-success btn-sm px-3">
+                                            <a href="{{ route('tutor.manage-assignments', ['course_id' => $course->id]) }}" class="btn btn-outline-success btn-sm px-3">
                                                 <i class="ri-edit-box-line me-1"></i> Assignments
                                             </a>
                                         </div>

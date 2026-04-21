@@ -1,6 +1,11 @@
 <div>
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
-        <h3 class="mb-0">Users</h3>
+        <div class="d-flex align-items-center gap-3">
+            <h3 class="mb-0">Users</h3>
+            <button class="btn btn-primary d-flex align-items-center" wire:click="openCreateUserModal">
+                <i class="ri-add-line me-1"></i> Add User
+            </button>
+        </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb align-items-center mb-0 lh-1">
                 <li class="breadcrumb-item">
@@ -19,6 +24,13 @@
     @if (session()->has('error'))
         <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
             {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
@@ -240,6 +252,59 @@
                             >
                                 Save
                             </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if($showCreateUserModal)
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create New User</h5>
+                        <button type="button" class="btn-close" wire:click="closeCreateUserModal"></button>
+                    </div>
+                    <form wire:submit.prevent="createUser">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" wire:model="name">
+                                    @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Surname</label>
+                                    <input type="text" class="form-control @error('surname') is-invalid @enderror" wire:model="surname">
+                                    @error('surname') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" wire:model="email">
+                                @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Role</label>
+                                <select class="form-select @error('role_id') is-invalid @enderror" wire:model="role_id">
+                                    <option value="">Select Role</option>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                                    @endforeach
+                                </select>
+                                @error('role_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" wire:model="password">
+                                @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" wire:click="closeCreateUserModal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Create User</button>
                         </div>
                     </form>
                 </div>
