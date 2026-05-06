@@ -1,4 +1,4 @@
-<div>
+<div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
         <h3 class="mb-0">My Courses</h3>
         <nav aria-label="breadcrumb">
@@ -90,6 +90,9 @@
                                             </a>
                                             <a href="{{ route('tutor.manage-assignments', ['course_id' => $course->id]) }}" class="btn btn-outline-success btn-sm px-3">
                                                 <i class="ri-edit-box-line me-1"></i> Assignments
+                                            </a>
+                                            <a href="{{ route('tutor.manage-marks', $course->id) }}" class="btn btn-outline-warning btn-sm px-3">
+                                                <i class="ri-medal-line me-1"></i> Marks
                                             </a>
                                         </div>
                                     </td>

@@ -8,103 +8,85 @@ new class extends Component
 };
 ?>
 
-<header class="header-area bg-white mb-4 rounded-10 border border-white" id="header-area">
-    <div class="row align-items-center">
-        <div class="col-md-6">
-            {{--
-            <div class="left-header-content">
-                <ul class="d-flex align-items-center ps-0 mb-0 list-unstyled justify-content-center justify-content-md-start">
-                    <li class="d-xl-none">
-                        <button class="header-burger-menu bg-transparent p-0 border-0 position-relative top-3" id="header-burger-menu">
-                            <span class="border-1 d-block for-dark-burger" style="border-bottom: 1px solid #475569; height: 1px; width: 25px;"></span>
-                            <span class="border-1 d-block for-dark-burger" style="border-bottom: 1px solid #475569; height: 1px; width: 25px; margin: 6px 0;"></span>
-                            <span class="border-1 d-block for-dark-burger" style="border-bottom: 1px solid #475569; height: 1px; width: 25px;"></span>
-                        </button>
-                    </li>
-                    <li>
-                        <form class="src-form position-relative">
-                            <input type="text" class="form-control" placeholder="Search here...">
-                            <div class="src-btn position-absolute top-50 start-0 translate-middle-y bg-transparent p-0 border-0">
-                                <span class="material-symbols-outlined">search</span>
-                            </div>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-            --}}
-        </div>
-        <div class="col-md-6">
-            <div class="right-header-content mt-3 mt-md-0">
-                <ul class="d-flex align-items-center justify-content-center justify-content-md-end ps-0 mb-0 list-unstyled">
-                    <li class="header-right-item light-dark-item">
-                        <div class="light-dark">
-                            <button class="switch-toggle dark-btn p-0 bg-transparent lh-0 border-0" id="switch-toggle">
-                                <span class="dark"><i class="ri-moon-line fs-22"></i></span> 
-                                <span class="light"><i class="ri-sun-line fs-22"></i></span>
-                            </button>
+<div class="header">
+    <div class="header-content">
+        <nav class="navbar navbar-expand">
+            <div class="collapse navbar-collapse justify-content-between">
+                <div class="header-left">
+                    <div class="search_bar dropdown">
+                        <span class="search_icon p-3 c-pointer" data-bs-toggle="dropdown">
+                            <i class="mdi mdi-magnify"></i>
+                        </span>
+                        <div class="dropdown-menu p-0 m-0">
+                            <form>
+                                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                            </form>
                         </div>
+                    </div>
+                </div>
+                <ul class="navbar-nav header-right">
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link bell dz-theme-mode" href="javascript:void(0);">
+                            <i id="icon-light" class="fas fa-sun"></i>
+                            <i id="icon-dark" class="fas fa-moon"></i>                
+                        </a>
                     </li>
-                    <li class="header-right-item">
-                        <div class="dropdown notifications noti">
-                            <button class="btn btn-secondary border-0 p-0 position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="ri-notification-3-line fs-22"></i>
-                                <span class="count">0</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-lg p-0 border-0 p-0 dropdown-menu-end">
-                                <div class="d-flex justify-content-between align-items-center title">
-                                    <span class="fw-medium fs-16 text-secondary">Notifications <span class="fw-normal text-body fs-16">(0)</span></span>
-                                    <button class="p-0 m-0 bg-transparent border-0 fs-15 text-primary fw-medium">Clear All</button>
-                                </div>
-                                <div style="max-height: 300px;" data-simplebar>
-                                    <div class="p-4 text-center">
-                                        <p class="mb-0 text-muted small">No new notifications</p>
-                                    </div>
-                                </div>
-                                <a href="#" class="dropdown-item text-center text-primary d-block view-all fw-medium rounded-bottom-3">
-                                    <span>See All Notifications </span>
-                                </a>
-                            </div>
-                        </div>
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link bell dz-fullscreen" href="#">
+                            <svg id="icon-full" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                            <svg id="icon-minimize" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minimize"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                        </a>
                     </li>
-                    <li class="header-right-item">
-                        <div class="dropdown admin-profile">
-                            <div class="d-xxl-flex align-items-center bg-transparent border-0 text-start p-0 cursor dropdown-toggle" data-bs-toggle="dropdown">
-                                <div class="flex-shrink-0 position-relative">
-                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                        <i class="ri-user-fill fs-20 text-secondary"></i>
-                                    </div>
-                                    <span class="d-block bg-success border border-2 border-white rounded-circle position-absolute end-0 bottom-0" style="width: 11px; height: 11px;"></span>
-                                </div>
-                            </div>
-                            <div class="dropdown-menu border-0 bg-white dropdown-menu-end shadow">
-                                <div class="d-flex align-items-center info p-3 border-bottom">
-                                    <div class="flex-grow-1 ms-2">
-                                        <h3 class="fw-bold fs-15 mb-0 text-secondary">{{ Auth::user()->name.' '.Auth::user()->surname }}</h3>
-                                        <span class="fs-13 text-muted">{{ ucwords(Auth::user()->role->name) }}</span>
-                                    </div>
-                                </div>
-                                <ul class="admin-link mb-0 list-unstyled p-2">
+                    {{--
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link bell ai-icon" href="#" role="button" data-bs-toggle="dropdown">
+                            <svg id="icon-user" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <div class="pulse-css"></div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3" style="height:380px;">
+                                <ul class="timeline">
                                     <li>
-                                        <a class="dropdown-item d-flex align-items-center text-body py-2 rounded" href="{{ url(Auth::user()->role->name.'/profile') }}">
-                                            <i class="ri-user-line me-2"></i>
-                                            <span>My Profile</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider opacity-10">
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center text-body py-2 rounded" href="{{ url('auth/logout') }}">
-                                            <i class="ri-logout-box-line me-2"></i>
-                                            <span>Logout</span>
-                                        </a>
+                                        <div class="timeline-panel">
+                                            <div class="media me-2">
+                                                <img alt="image" width="50" src="images/avatar/1.jpg">
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="mb-1">Dr sultads Send you Photo</h6>
+                                                <small class="d-block">29 July 2023 - 02:26 PM</small>
+                                            </div>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
+                            <a class="all-notification" href="#">See all notifications <i class="ti-arrow-right"></i></a>
+                        </div>
+                    </li>
+                    --}}
+                    <li class="nav-item dropdown header-profile">
+                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                            <img src="{{ asset('img/no-img-avatar.png') }}" width="20" alt="">
+                            <div class="header-info">
+                                <span>Hey, <strong>{{ Auth::user()->name }}</strong></span>
+                                <small class="text-capitalize">{{ Auth::user()->role->description }}</small>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="{{ url('user/profile') }}" class="dropdown-item ai-icon">
+                                <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                <span class="ml-2">Profile </span>
+                            </a>
+                            <a href="{{ url('auth/logout') }}" class="dropdown-item ai-icon">
+                                <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                <span class="ml-2">Logout </span>
+                            </a>
                         </div>
                     </li>
                 </ul>
             </div>
-        </div>
+        </nav>
     </div>
-</header>
+</div>

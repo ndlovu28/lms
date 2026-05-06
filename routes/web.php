@@ -5,14 +5,19 @@ use App\Livewire\Admin\AdminCourses;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\AdminPhase;
 use App\Livewire\Admin\AdminUsers;
+use App\Livewire\Admin\ManageCertificates;
 use App\Livewire\Admin\SchoolInfo;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
+use App\Livewire\Shared\ManageMarks;
 use App\Livewire\Shared\Profile;
+use App\Livewire\Shared\StudentReports;
+use App\Livewire\Student\MyCertificates;
 use App\Livewire\Student\StudentAssignments;
 use App\Livewire\Student\StudentDashboard;
 use App\Livewire\Student\TakeQuiz;
 use App\Livewire\Student\ViewLearningMaterials;
+use App\Livewire\Student\ViewMarks;
 use App\Livewire\Su\ManageSchool;
 use App\Livewire\Su\SuDashboard;
 use App\Livewire\Su\SuStats;
@@ -76,6 +81,15 @@ Route::middleware(['auth', 'admin'])
 
         Route::livewire('/school-info', SchoolInfo::class)
             ->name('admin.school-info');
+
+        Route::livewire('/manage-marks/{course}', ManageMarks::class)
+            ->name('admin.manage-marks');
+
+        Route::livewire('/reports', StudentReports::class)
+            ->name('admin.reports');
+
+        Route::livewire('/certificates', ManageCertificates::class)
+            ->name('admin.certificates');
     });
 
 Route::middleware(['auth', 'tutor'])
@@ -113,6 +127,12 @@ Route::middleware(['auth', 'tutor'])
 
         Route::livewire('/assignment-submissions/{assignment}', ReviewSubmissions::class)
             ->name('tutor.assignment-submissions');
+
+        Route::livewire('/manage-marks/{course}', ManageMarks::class)
+            ->name('tutor.manage-marks');
+
+        Route::livewire('/reports', StudentReports::class)
+            ->name('tutor.reports');
     });
 
 Route::middleware(['auth', 'student'])
@@ -131,4 +151,10 @@ Route::middleware(['auth', 'student'])
 
         Route::livewire('/assignments/{course}', StudentAssignments::class)
             ->name('student.assignments');
+
+        Route::livewire('/my-marks', ViewMarks::class)
+            ->name('student.my-marks');
+
+        Route::livewire('/my-certificates', MyCertificates::class)
+            ->name('student.my-certificates');
     });

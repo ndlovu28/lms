@@ -1,4 +1,4 @@
-<div>
+<div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
         <div class="d-flex align-items-center gap-3">
             <h3 class="mb-0">Users</h3>

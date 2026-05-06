@@ -68,6 +68,11 @@ class Course extends Model
         return $this->hasMany(LiveSession::class);
     }
 
+    public function marks(): HasMany
+    {
+        return $this->hasMany(Mark::class);
+    }
+
     public function activeSession(): HasOne
     {
         return $this->hasOne(LiveSession::class)->where('is_active', true);

@@ -1,4 +1,4 @@
-<div>
+<div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
         <h3 class="mb-0">System Overview</h3>
         <nav aria-label="breadcrumb">
@@ -17,88 +17,71 @@
     </div>
 
     <div class="row">
-        <!-- Schools Stats -->
-        <div class="col-sm-6 col-lg-3">
-            <div class="card bg-white border border-white rounded-10 mb-4">
+        <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+            <div class="widget-stat card bg-warning">
                 <div class="card-body p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-shrink-0">
-                            <div class="bg-primary bg-opacity-10 text-primary rounded-2 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                <i class="ri-school-line fs-24"></i>
+                    <div class="media">
+                        <span class="me-3">
+                            <i class="las la-school"></i>
+                        </span>
+                        <div class="media-body text-white">
+                            <p class="mb-1 text-white">Total Schools</p>
+                            <div class="d-flex">
+                                <h3 class="text-white">{{ $totalSchools }}</h3>
+                                <span class="ms-auto"><small>{{ $activeSchools }} Active</small></span>
                             </div>
                         </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h5 class="card-title mb-0 fs-14 fw-medium text-body">Total Schools</h5>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="mb-0 fs-24 fw-semibold text-secondary">{{ $totalSchools }}</h3>
-                        <span class="fs-12 text-success fw-medium">{{ $activeSchools }} Active</span>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Users Stats -->
-        <div class="col-sm-6 col-lg-3">
-            <div class="card bg-white border border-white rounded-10 mb-4">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-shrink-0">
-                            <div class="bg-success bg-opacity-10 text-success rounded-2 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                <i class="ri-group-line fs-24"></i>
+        <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+            <div class="widget-stat card bg-primary">
+                <div class="card-body  p-4">
+                    <div class="media">
+                        <span class="me-3">
+                            <i class="la la-users"></i>
+                        </span>
+                        <div class="media-body text-white">
+                            <p class="mb-1 text-white">Total Users</p>
+                            <div class="d-flex">
+                                <h3 class="text-white">{{ $totalUsers }}</h3>
+                                <span class="ms-auto"><small>{{ $studentsCount }} Students</small></span>
                             </div>
                         </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h5 class="card-title mb-0 fs-14 fw-medium text-body">Total Users</h5>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="mb-0 fs-24 fw-semibold text-secondary">{{ $totalUsers }}</h3>
-                        <span class="fs-12 text-muted fw-medium">{{ $studentsCount }} Students</span>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Courses Stats -->
-        <div class="col-sm-6 col-lg-3">
-            <div class="card bg-white border border-white rounded-10 mb-4">
+        <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+            <div class="widget-stat card bg-secondary overflow-hidden">
                 <div class="card-body p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-shrink-0">
-                            <div class="bg-info bg-opacity-10 text-info rounded-2 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                <i class="ri-book-line fs-24"></i>
-                            </div>
+                    <div class="media">
+                        <span class="me-3">
+                            <i class="la la-graduation-cap"></i>
+                        </span>
+                        <div class="media-body text-white">
+                            <p class="mb-1 text-white">Total Course</p>
+                            <h3 class="text-white">{{ $totalCourses }}</h3>
                         </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h5 class="card-title mb-0 fs-14 fw-medium text-body">Total Courses</h5>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="mb-0 fs-24 fw-semibold text-secondary">{{ $totalCourses }}</h3>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Quizzes Stats -->
-        <div class="col-sm-6 col-lg-3">
-            <div class="card bg-white border border-white rounded-10 mb-4">
+        <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+            <div class="widget-stat card bg-danger ">
                 <div class="card-body p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-shrink-0">
-                            <div class="bg-warning bg-opacity-10 text-warning rounded-2 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                <i class="ri-questionnaire-line fs-24"></i>
+                    <div class="media">
+                        <span class="me-3">
+                            <i class="las la-redo-alt"></i>
+                        </span>
+                        <div class="media-body text-white">
+                            <p class="mb-1 text-white">Quiz Attempts</p>
+                            <div class="d-flex">
+                                <h3 class="text-white">{{ $totalAttempts }}</h3>
+                                <span class="ms-auto"><small>from {{ $totalQuizzes }} Quizzes</small></span>
                             </div>
                         </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h5 class="card-title mb-0 fs-14 fw-medium text-body">Quiz Attempts</h5>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="mb-0 fs-24 fw-semibold text-secondary">{{ $totalAttempts }}</h3>
-                        <span class="fs-12 text-muted fw-medium">from {{ $totalQuizzes }} Quizzes</span>
                     </div>
                 </div>
             </div>

@@ -3,15 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -70,8 +72,23 @@ class User extends Authenticatable
         return $this->belongsToMany(Course::class);
     }
 
-    public function quizAttempts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function quizAttempts(): HasMany
     {
         return $this->hasMany(QuizAttempt::class);
+    }
+
+    public function marks(): HasMany
+    {
+        return $this->hasMany(Mark::class, 'user_id');
+    }
+
+    public function certificates(): HasMany
+    {
+        return $this->hasMany(Certificate::class, 'user_id');
+    }
+
+    public function createdMarks(): HasMany
+    {
+        return $this->hasMany(Mark::class, 'created_by');
     }
 }

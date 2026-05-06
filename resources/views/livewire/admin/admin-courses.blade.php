@@ -1,4 +1,4 @@
-<div>
+<div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
         <h3 class="mb-0">Courses</h3>
         <nav aria-label="breadcrumb">
@@ -182,6 +182,9 @@
                                                 >
                                                     <i class="ri-edit-line"></i> Edit
                                                 </button>
+                                                <a href="{{ route('admin.manage-marks', $course->id) }}" class="btn btn-outline-warning btn-sm px-3">
+                                                    <i class="ri-medal-line"></i> Marks
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -1,125 +1,123 @@
-<div class="m-lg-auto my-auto w-930 py-4">
-    <div class="card bg-white border rounded-10 border-white py-100 px-130">
-        <div class="p-md-5 p-4 p-lg-0">
-            <div class="text-center mb-4">
-                <h3 class="fs-26 fw-medium" style="margin-bottom: 6px;">Register</h3>
-                <p class="fs-16 text-secondary lh-1-8">Already have an account yet? <a href="{{ url('auth/login') }}" class="text-primary text-decoration-none">Login</a></p>
+<div>
+    <div class="login-account">
+        <div class="row h-100">
+            <div class="col-lg-6 align-self-start">
+                <div class="account-info-area" style="background-image: url(../../img/rainbow.gif)">
+                    <div class="login-content">
+                        <p class="sub-title">Register your account with your school details & login credentials</p>
+                        <h1 class="title">The Evolution of <span>Learning</span></h1>
+                        <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+                    </div>
+                </div>
             </div>
-            @if (session('registration_success'))
-                <div class="alert alert-success">
-                    {{ session('registration_success') }}
-                </div>
-            @endif
-            <form wire:submit.prevent="findSchool" class="space-y-4">
-                <div class="mb-20">
-                    <label class="label fs-16 mb-2">School identifier</label>
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="floatingInput1" placeholder="Enter email address *" wire:model.live="schoolIdentifier">
-                        <label for="floatingInput1">e.g. my-school-slug</label>
+            <div class="col-lg-6 col-md-7 col-sm-12 mx-auto align-self-center">
+                <div class="login-form">
+                    <div class="login-head">
+                        <h3 class="title">Welcome</h3>
                     </div>
-                    @error('schoolIdentifier')
-                        <p class="mt-2 text-sm text-danger">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-secondary btn-sm">Find school</button>
-                </div>
-            </form>
-            @if($school)
-                <div class="mt-6 border-t border-gray-200 pt-4">
-                    <div class="d-flex items-center space-x-4">
-                        @if($school->logo_url)
-                            <img
-                                src="{{ $school->logo_url }}"
-                                alt="{{ $school->name }} logo"
-                                class="h-10 w-10 rounded-full object-cover"
-                                style="width: 100px;"
-                            />
-                        @endif
-
-                        <div class="ms-3">
-                            <p class="text-sm font-medium text-gray-900">
-                                {{ $school->name }}
-                            </p>
-                            <p class="text-xs text-gray-500">
-                                Identifier: {{ $school->slug }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            @if($school)
-            <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
-                @if(session('registration_success'))
-                    <div class="mb-4 rounded-md bg-green-50 p-3 text-sm text-green-800">
-                        {{ session('registration_success') }}
-                    </div>
-                @endif
-
-                <form wire:submit.prevent="register" class="space-y-4">
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div class="mb-20">
-                            <label class="label fs-16 mb-2">First Name</label>
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="floatingInput1" placeholder="Enter email address *" wire:model.live="name">
-                                <label for="floatingInput1">Name *</label>
+                    <h6 class="login-title @if($school) mb-0 @endif"><span>Register</span></h6>
+                    @if(!$school)
+                    <form wire:submit.prevent="findSchool">
+                        <div class="mb-4">
+                            <label class="mb-1 text-dark">School Identifier</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-lg" placeholder="e.g. my-school-slug *" wire:model.live="schoolIdentifier">
+                                <button class="btn btn-outline-secondary" type="submit">Find School</button>
                             </div>
-                            @error('name')
+                            @error('schoolIdentifier')
                                 <p class="mt-2 text-sm text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="mb-20">
-                            <label class="label fs-16 mb-2">Surname</label>
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="floatingInput1" placeholder="Enter email address *" wire:model.live="surname">
-                                <label for="floatingInput1">Surname *</label>
+                    </form>
+                    @endif
+                    @if($school)
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="profile card card-body px-3 pt-3 pb-0">
+                                <div class="profile-head">
+                                    <div class="photo-content">
+                                        <div class="cover-photo" @if($school->banner_url) style="background-image: url('{{ asset('storage/'.$school->banner_url) }}'); height: 111px;" @else style="background-image: url('{{ asset('img/cover.jpg') }}'); height: 111px;" @endif></div>
+                                    </div>
+                                    <div class="profile-info">
+                                        <div class="profile-photo">
+                                            @if($school->logo_url)
+                                                <img src="{{ asset('storage/'.$school->logo_url) }}" class="img-fluid rounded-circle" alt="">
+                                            @else
+                                                <img src="{{ asset('img/logo_placeholder.png') }}" class="img-fluid rounded-circle" alt="">
+                                            @endif
+                                        </div>
+                                        <div class="profile-details">
+                                            <div class="profile-name px-3 pt-2">
+                                                <h4 class="text-primary mb-0 text-uppercase">{{ $school->name }}</h4>
+                                                <p>{{ $school->slug }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            @error('surname')
-                                <p class="mt-2 text-sm text-danger">{{ $message }}</p>
-                            @enderror
                         </div>
-                        <div class="mb-20">
-                            <label class="label fs-16 mb-2">Email Address</label>
-                            <div class="form-floating">
-                                <input type="email" class="form-control" id="floatingInput1" placeholder="Enter email address *" wire:model.live="email">
-                                <label for="floatingInput1">Email Address *</label>
+                    </div>
+                    @if(session('registration_success'))
+                        <div class="mb-4 rounded-md bg-green-50 p-3 text-sm text-green-800">
+                            {{ session('registration_success') }}
+                        </div>
+                    @endif
+                    <form wire:submit.prevent="register">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="mb-1 text-dark">First Name *</label>
+                                    <input type="text" class="form-control form-control-sm" wire:model.live="name">
+                                    @error('name')
+                                        <p class="mt-2 text-sm text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="mb-1 text-dark">Surname *</label>
+                                    <input type="text" class="form-control form-control-sm" wire:model.live="surname">
+                                    @error('surname')
+                                        <p class="mt-2 text-sm text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="mb-1 text-dark">Email *</label>
+                            <input type="email" class="form-control form-control-sm" wire:model.live="email">
                             @error('email')
                                 <p class="mt-2 text-sm text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="mb-20">
-                            <label class="label fs-16 mb-2">Password</label>
-                            <div class="form-floating">
-                                <input type="password" class="form-control" id="floatingInput1" placeholder="Enter email address *" wire:model.live="password">
-                                <label for="floatingInput1">Email Address *</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="mb-1 text-dark">Password</label>
+                                    <input type="password" class="form-control form-control-sm" wire:model.live="password">
+                                    @error('password')
+                                        <p class="mt-2 text-sm text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
-                            @error('password')
-                                <p class="mt-2 text-sm text-danger">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="mb-20">
-                            <label class="label fs-16 mb-2">Confirm Password</label>
-                            <div class="form-floating">
-                                <input type="password" class="form-control" id="floatingInput1" placeholder="Enter email address *" wire:model.live="passwordConfirmation">
-                                <label for="floatingInput1">Confirm password *</label>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="mb-1 text-dark">Confirm Password</label>
+                                    <input type="password" class="form-control form-control-sm" wire:model.live="passwordConfirmation">
+                                    @error('passwordConfirmation')
+                                        <p class="mt-2 text-sm text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
-                            @error('passwordConfirmation')
-                                <p class="mt-2 text-sm text-danger">{{ $message }}</p>
-                            @enderror
                         </div>
-                        <div class="mb-20">
-                            <label class="block text-sm font-medium text-gray-700">
-                                I am a
-                            </label>
-                            <div class="form-check">
+                        <div class="mb-4">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" id="student" value="student" wire:model="userType">
                                 <label class="form-check-label" for="student">
                                     Student
                                 </label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" id="tutor" value="tutor" wire:model="userType">
                                 <label class="form-check-label" for="tutor">
                                     Tutor
@@ -132,18 +130,13 @@
                                 <p class="mt-2 text-sm text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-                    </div>
-                    <div>
-                        <button
-                            type="submit"
-                            class="btn btn-primary btn-sm"
-                        >
-                            Register
-                        </button>
-                    </div>
-                </form>
+                        <div class="text-center mb-4">
+                            <button type="submit" class="btn btn-primary btn-block">Sign me up</button>
+                        </div>
+                    </form>
+                    @endif
+                </div>
             </div>
-        @endif
         </div>
     </div>
 </div>

@@ -1,0 +1,12 @@
+.photo-content .cover-photo {
+    background-size: cover;
+    background-position: center;
+    height: 250px;
+    width: 100%; 
+}
+.container-fluid .card{
+    height: auto !important;
+}
+.DZ-theme-btn{
+    display: none !important;
+}
