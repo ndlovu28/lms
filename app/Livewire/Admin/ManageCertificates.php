@@ -3,7 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Certificate;
-use App\Models\Course;
+use App\Models\Subject;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +17,7 @@ class ManageCertificates extends Component
 
     public $studentId;
 
-    public $courseId;
+    public $subjectId;
 
     public $title = 'Certificate of Achievement';
 
@@ -27,7 +27,7 @@ class ManageCertificates extends Component
 
     protected $rules = [
         'studentId' => 'required|exists:users,id',
-        'courseId' => 'nullable|exists:courses,id',
+        'subjectId' => 'nullable|exists:subjects,id',
         'title' => 'required|string|max:255',
         'description' => 'required|string',
         'issuedAt' => 'required|date',
@@ -44,7 +44,7 @@ class ManageCertificates extends Component
 
         $certificate = Certificate::create([
             'user_id' => $this->studentId,
-            'course_id' => $this->courseId ?: null,
+            'subject_id' => $this->subjectId ?: null,
             'title' => $this->title,
             'description' => $this->description,
             'issued_at' => $this->issuedAt,
@@ -52,7 +52,7 @@ class ManageCertificates extends Component
             'certificate_number' => 'CERT-'.strtoupper(Str::random(10)),
         ]);
 
-        $this->reset(['studentId', 'courseId', 'description']);
+        $this->reset(['studentId', 'subjectId', 'description']);
         $this->title = 'Certificate of Achievement';
 
         session()->flash('success', 'Certificate issued successfully.');
@@ -60,7 +60,7 @@ class ManageCertificates extends Component
 
     public function downloadCertificate($id)
     {
-        $certificate = Certificate::with(['student', 'course', 'student.school'])->findOrFail($id);
+        $certificate = Certificate::with(['student', 'subject', 'student.school'])->findOrFail($id);
 
         $school = $certificate->student->school;
 
@@ -90,18 +90,18 @@ class ManageCertificates extends Component
             ->orderBy('name')
             ->get();
 
-        $courses = Course::where('school_id', $schoolId)->orderBy('name')->get();
+        $subjects = Subject::where('school_id', $schoolId)->orderBy('name')->get();
 
         $issuedCertificates = Certificate::whereHas('student', function ($q) use ($schoolId) {
             $q->where('school_id', $schoolId);
         })
-            ->with(['student', 'course'])
+            ->with(['student', 'subject'])
             ->latest()
             ->paginate(10);
 
         return view('livewire.admin.manage-certificates', [
             'students' => $students,
-            'courses' => $courses,
+            'subjects' => $subjects,
             'issuedCertificates' => $issuedCertificates,
         ])->layout('layouts.app');
     }

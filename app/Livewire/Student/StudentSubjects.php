@@ -5,14 +5,14 @@ namespace App\Livewire\Student;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class StudentDashboard extends Component
+class StudentSubjects extends Component
 {
     public function render()
     {
         $student = Auth::user();
 
-        $courses = $student->courses()
-            ->with(['phase', 'tutor', 'quizzes.questions', 'activeSession'])
+        $subjects = $student->subjects()
+            ->with(['course.phase', 'tutor', 'quizzes.questions', 'activeSession', 'course'])
             ->get();
 
         $attempts = $student->quizAttempts()
@@ -20,8 +20,8 @@ class StudentDashboard extends Component
             ->get()
             ->groupBy('quiz_id');
 
-        return view('livewire.student.student-dashboard', [
-            'courses' => $courses,
+        return view('livewire.student.student-subjects', [
+            'subjects' => $subjects,
             'attempts' => $attempts,
         ]);
     }

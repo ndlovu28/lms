@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Tutor;
 
-use App\Models\Course;
 use App\Models\LearningMaterial;
+use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -13,28 +13,32 @@ class ManageLearningMaterials extends Component
 {
     use WithFileUploads;
 
-    public $course_id;
+    public $subject_id;
+
     public $title;
+
     public $type = 'text';
+
     public $content;
+
     public $file;
-    
-    public $selectedCourse = null;
+
+    public $selectedSubject = null;
 
     protected $rules = [
-        'course_id' => 'required|exists:courses,id',
+        'subject_id' => 'required|exists:subjects,id',
         'title' => 'required|string|max:255',
         'type' => 'required|in:text,video,file',
         'content' => 'required_if:type,text,video',
         'file' => 'required_if:type,file|max:10240', // 10MB limit
     ];
 
-    public function mount($course_id = null)
+    public function mount($subject_id = null)
     {
-        if ($course_id) {
-            $this->course_id = $course_id;
-            $this->selectedCourse = Course::findOrFail($course_id);
-            if ($this->selectedCourse->tutor_id !== Auth::id()) {
+        if ($subject_id) {
+            $this->subject_id = $subject_id;
+            $this->selectedSubject = Subject::findOrFail($subject_id);
+            if ($this->selectedSubject->tutor_id !== Auth::id()) {
                 abort(403);
             }
         }
@@ -45,7 +49,7 @@ class ManageLearningMaterials extends Component
         $this->validate();
 
         $data = [
-            'course_id' => $this->course_id,
+            'subject_id' => $this->subject_id,
             'tutor_id' => Auth::id(),
             'title' => $this->title,
             'type' => $this->type,
@@ -83,15 +87,15 @@ class ManageLearningMaterials extends Component
 
     public function render()
     {
-        $courses = Course::where('tutor_id', Auth::id())->get();
+        $subjects = Subject::where('tutor_id', Auth::id())->get();
         $materials = [];
-        
-        if ($this->course_id) {
-            $materials = LearningMaterial::where('course_id', $this->course_id)->orderBy('created_at', 'desc')->get();
+
+        if ($this->subject_id) {
+            $materials = LearningMaterial::where('subject_id', $this->subject_id)->orderBy('created_at', 'desc')->get();
         }
 
         return view('livewire.tutor.manage-learning-materials', [
-            'courses' => $courses,
+            'subjects' => $subjects,
             'materials' => $materials,
         ]);
     }

@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Course;
 use App\Models\Quiz;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,7 +21,7 @@ class QuizFactory extends Factory
     {
         return [
             'tutor_id' => User::factory(),
-            'course_id' => Course::factory(),
+            'subject_id' => Subject::factory(),
             'name' => fake()->words(2, true).' Quiz',
         ];
     }

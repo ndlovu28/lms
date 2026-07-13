@@ -4,6 +4,7 @@ namespace App\Livewire\Shared;
 
 use App\Models\Course;
 use App\Models\Mark;
+use App\Models\Subject;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class StudentReports extends Component
             ->whereHas('role', fn ($q) => $q->where('name', 'student'));
 
         if ($role === 'tutor') {
-            $query->whereHas('courses', function ($q) use ($user) {
+            $query->whereHas('subjects', function ($q) use ($user) {
                 $q->where('tutor_id', $user->id);
             });
         }
@@ -54,7 +55,7 @@ class StudentReports extends Component
             ->groupBy('course_id');
             */
         $this->studentMarks = Mark::where('user_id', $studentId)
-            ->with('course')
+            ->with('subject')
             ->latest()
             ->get();
     }
@@ -70,26 +71,26 @@ class StudentReports extends Component
         }
 
         if ($user->role->name === 'tutor') {
-            $hasCommonCourse = Course::where('tutor_id', $user->id)
+            $hasCommonSubject = Subject::where('tutor_id', $user->id)
                 ->whereHas('students', function ($q) use ($studentId) {
                     $q->where('users.id', $studentId);
                 })->exists();
 
-            if (! $hasCommonCourse) {
+            if (! $hasCommonSubject) {
                 abort(403);
             }
         }
 
         $marks = Mark::where('user_id', $studentId)
-            ->with('course')
+            ->with('subject')
             ->latest()
             ->get()
-            ->groupBy('course_id');
+            ->groupBy('subject_id');
 
         $pdf = Pdf::loadView('reports.student-mark-report', [
             'student' => $student,
             'school' => $student->school,
-            'marksByCourse' => $marks,
+            'marksBySubject' => $marks,
             'generatedAt' => now()->format('M d, Y H:i'),
         ]);
 

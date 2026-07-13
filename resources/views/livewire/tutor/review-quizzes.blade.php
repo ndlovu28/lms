@@ -46,7 +46,7 @@
                                         <small class="text-muted"><i class="ri-calendar-line me-1"></i>Created: {{ $quiz->created_at->format('M d, Y') }}</small>
                                     </td>
                                     <td class="py-3">
-                                        <span class="text-body">{{ $quiz->course->name }}</span>
+                                        <span class="text-body">{{ $quiz->subject->name }}</span>
                                     </td>
                                     <td class="py-3 text-center">
                                         <span class="badge bg-light text-body border px-2 py-1">{{ $quiz->questions_count }}</span>

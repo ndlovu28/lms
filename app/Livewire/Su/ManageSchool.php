@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Su;
 
-use App\Models\Role;
-use App\Models\School;
-use App\Models\User;
-use App\Models\Course;
-use App\Models\Quiz;
-use App\Models\QuizAttempt;
-use App\Models\LearningMaterial;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
+use App\Models\Course;
+use App\Models\LearningMaterial;
+use App\Models\Quiz;
+use App\Models\QuizAttempt;
+use App\Models\Role;
+use App\Models\School;
+use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -22,7 +23,9 @@ class ManageSchool extends Component
     use WithFileUploads, WithPagination;
 
     public $school;
+
     public bool $isNew = false;
+
     public string $activeTab = 'info';
 
     // School Form Fields
@@ -222,7 +225,7 @@ class ManageSchool extends Component
 
     public function render()
     {
-        $roles = Role::all();
+        $roles = Role::where('name', '<>', 'su')->get();
         $rolesMap = $roles->pluck('id', 'name');
 
         $usersQuery = User::where('school_id', $this->school->id);
@@ -235,18 +238,19 @@ class ManageSchool extends Component
         }
 
         $stats = [];
-        if (!$this->isNew && $this->activeTab === 'stats') {
+        if (! $this->isNew && $this->activeTab === 'stats') {
             $stats = [
                 'totalUsers' => User::where('school_id', $this->school->id)->count(),
                 'adminsCount' => User::where('school_id', $this->school->id)->where('role_id', $rolesMap['admin'] ?? 0)->count(),
                 'tutorsCount' => User::where('school_id', $this->school->id)->where('role_id', $rolesMap['tutor'] ?? 0)->count(),
                 'studentsCount' => User::where('school_id', $this->school->id)->where('role_id', $rolesMap['student'] ?? 0)->count(),
-                'totalCourses' => Course::where('school_id', $this->school->id)->count(),
-                'totalQuizzes' => Quiz::whereHas('course', fn($q) => $q->where('school_id', $this->school->id))->count(),
-                'totalAttempts' => QuizAttempt::whereHas('user', fn($q) => $q->where('school_id', $this->school->id))->count(),
-                'totalMaterials' => LearningMaterial::whereHas('course', fn($q) => $q->where('school_id', $this->school->id))->count(),
-                'totalAssignments' => Assignment::whereHas('course', fn($q) => $q->where('school_id', $this->school->id))->count(),
-                'totalSubmissions' => AssignmentSubmission::whereHas('user', fn($q) => $q->where('school_id', $this->school->id))->count(),
+                'totalCourses' => Course::whereHas('subjects', fn ($q) => $q->where('school_id', $this->school->id))->count(),
+                'totalSubjects' => Subject::where('school_id', $this->school->id)->count(),
+                'totalQuizzes' => Quiz::whereHas('subject', fn ($q) => $q->where('school_id', $this->school->id))->count(),
+                'totalAttempts' => QuizAttempt::whereHas('user', fn ($q) => $q->where('school_id', $this->school->id))->count(),
+                'totalMaterials' => LearningMaterial::whereHas('subject', fn ($q) => $q->where('school_id', $this->school->id))->count(),
+                'totalAssignments' => Assignment::whereHas('subject', fn ($q) => $q->where('school_id', $this->school->id))->count(),
+                'totalSubmissions' => AssignmentSubmission::whereHas('user', fn ($q) => $q->where('school_id', $this->school->id))->count(),
             ];
         }
 
@@ -255,4 +259,5 @@ class ManageSchool extends Component
             'roles' => $roles,
             'stats' => $stats,
         ]);
-    }}
+    }
+}

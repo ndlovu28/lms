@@ -13,7 +13,7 @@ class LearningMaterial extends Model
     use HasFactory;
 
     protected $fillable = [
-        'course_id',
+        'subject_id',
         'tutor_id',
         'title',
         'type',
@@ -22,9 +22,9 @@ class LearningMaterial extends Model
         'file_name',
     ];
 
-    public function course(): BelongsTo
+    public function subject(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Subject::class);
     }
 
     public function tutor(): BelongsTo

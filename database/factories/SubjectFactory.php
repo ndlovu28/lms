@@ -3,13 +3,15 @@
 namespace Database\Factories;
 
 use App\Models\Course;
-use App\Models\Phase;
+use App\Models\School;
+use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Course>
+ * @extends Factory<Subject>
  */
-class CourseFactory extends Factory
+class SubjectFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,7 +21,9 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
-            'phase_id' => Phase::factory(),
+            'school_id' => School::factory(),
+            'tutor_id' => User::factory(),
+            'course_id' => Course::factory(),
             'name' => fake()->words(3, true),
             'description' => fake()->paragraph(),
         ];

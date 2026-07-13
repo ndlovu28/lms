@@ -156,8 +156,8 @@
                                                     </li>
                                                 @endif
                                                 <li>
-                                                    <button class="dropdown-item rounded mb-1" type="button" wire:click="openAssignCourses({{ $user->id }})">
-                                                        <i class="ri-book-open-line me-2"></i> Assign Courses
+                                                    <button class="dropdown-item rounded mb-1" type="button" wire:click="openAssignSubjects({{ $user->id }})">
+                                                        <i class="ri-book-open-line me-2"></i> Assign Subjects
                                                     </button>
                                                 </li>
                                                 <li>
@@ -177,13 +177,13 @@
         </div>
     </div>
 
-    @if($showAssignCoursesModal && $assignUserId)
+    @if($showAssignSubjectsModal && $assignUserId)
         <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            Assign courses
+                            Assign subjects
                             @if($assignUserType === 'tutor')
                                 <small class="text-muted"> (as tutor)</small>
                             @elseif($assignUserType === 'student')
@@ -194,41 +194,39 @@
                             type="button"
                             class="btn-close"
                             aria-label="Close"
-                            wire:click="closeAssignCoursesModal"
+                            wire:click="closeAssignSubjectsModal"
                         ></button>
                     </div>
 
-                    <form wire:submit.prevent="saveAssignedCourses">
+                    <form wire:submit.prevent="saveAssignedSubjects">
                         <div class="modal-body">
-                            @if($coursesForAssign->isEmpty())
+                            @if($subjectsForAssign->isEmpty())
                                 <p class="text-muted mb-0">
-                                    There are no courses available to assign in this school.
+                                    There are no subjects available to assign in this school.
                                 </p>
                             @else
                                 <p class="small text-muted">
-                                    Select the courses to assign to this user.
+                                    Select the subjects to assign to this user.
                                 </p>
                                 <div class="row">
-                                    @foreach($coursesForAssign as $course)
+                                    @foreach($subjectsForAssign as $subject)
                                         <div class="col-md-6 mb-2">
                                             <div class="form-check">
                                                 <input
-                                                    id="courseAssign{{ $course->id }}"
+                                                    id="subjectAssign{{ $subject->id }}"
                                                     type="checkbox"
                                                     class="form-check-input"
-                                                    value="{{ $course->id }}"
-                                                    wire:model="selectedCourseIds"
+                                                    value="{{ $subject->id }}"
+                                                    wire:model="selectedSubjectIds"
                                                 >
                                                 <label
                                                     class="form-check-label"
-                                                    for="courseAssign{{ $course->id }}"
+                                                    for="subjectAssign{{ $subject->id }}"
                                                 >
-                                                    {{ $course->name }}
-                                                    @if($course->phase)
-                                                        <span class="text-muted small">
-                                                            ({{ $course->phase->name }})
-                                                        </span>
-                                                    @endif
+                                                    {{ $subject->name }}
+                                                    <span class="text-muted small">
+                                                        ({{ $subject->course->phase->name }})
+                                                    </span>
                                                 </label>
                                             </div>
                                         </div>
@@ -241,14 +239,14 @@
                             <button
                                 type="button"
                                 class="btn btn-secondary"
-                                wire:click="closeAssignCoursesModal"
+                                wire:click="closeAssignSubjectsModal"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
                                 class="btn btn-primary"
-                                @if($coursesForAssign->isEmpty()) disabled @endif
+                                @if($subjectsForAssign->isEmpty()) disabled @endif
                             >
                                 Save
                             </button>

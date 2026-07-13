@@ -29,9 +29,9 @@
                     <div class="col-md-6 mb-3">
                         <label for="course_id" class="form-label text-body fw-medium">Course</label>
                         <select id="course_id" class="form-select @error('course_id') is-invalid @enderror" wire:model="course_id">
-                            <option value="">Select a course</option>
-                            @foreach($courses as $course)
-                                <option value="{{ $course->id }}">{{ $course->name.' ('.$course->phase->name.')' }}</option>
+                            <option value="">Select a subject</option>
+                            @foreach($subjects as $subject)
+                                <option value="{{ $subject->id }}">{{ $subject->name.' ('.$subject->course->phase->name.')' }}</option>
                             @endforeach
                         </select>
                         @error('course_id') <div class="invalid-feedback">{{ $message }}</div> @enderror

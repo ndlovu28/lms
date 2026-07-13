@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('course_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('subject_id')->nullable()->constrained('subjects')->onDelete('set null');
             $table->string('title'); // e.g., "Certificate of Completion", "Outstanding Achievement"
             $table->text('description')->nullable();
             $table->date('issued_at');

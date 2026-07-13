@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('live_sessions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
             $table->foreignId('tutor_id')->constrained('users')->cascadeOnDelete();
             $table->string('meeting_id');
             $table->string('topic');

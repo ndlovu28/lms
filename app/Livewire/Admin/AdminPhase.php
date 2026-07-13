@@ -14,8 +14,7 @@ class AdminPhase extends Component
 
     public ?string $description = null;
 
-    public function render()
-    {
+    public function render(){
         $schoolId = $this->currentSchoolId();
 
         return view('livewire.admin.admin-phase', [

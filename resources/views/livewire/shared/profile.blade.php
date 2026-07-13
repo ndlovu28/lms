@@ -72,20 +72,22 @@
                         @if(in_array(Auth::user()->role->name, ['su', 'admin']))
                             <div class="bg-light rounded-10 p-4 mt-4 mb-4">
                                 <h5 class="fs-16 fw-bold mb-3 text-secondary"><i class="ri-admin-line me-2"></i>Administrative Controls</h5>
-                                
                                 <div class="row g-3">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label text-body fw-medium">User Role</label>
-                                        <select class="form-select border-0" wire:model="role_id">
-                                            @foreach($roles as $role)
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Role</label>
+                                            <select class="form-control">
+                                                <option value="">Select Option</option>
+                                                @foreach($roles as $role)
                                                 <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
                                             @endforeach
-                                        </select>
-                                        @error('role_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                            </select>
+                                            @error('role_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                        </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label text-body fw-medium">Account Status</label>
-                                        <select class="form-select border-0" wire:model="status">
+                                        <select class="form-control" wire:model="status">
                                             <option value="1">Active</option>
                                             <option value="0">Disabled</option>
                                         </select>

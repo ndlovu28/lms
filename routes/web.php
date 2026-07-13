@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Livewire\Admin\AdminCourses;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\AdminPhase;
+use App\Livewire\Admin\AdminSubjects;
 use App\Livewire\Admin\AdminUsers;
 use App\Livewire\Admin\ManageCertificates;
 use App\Livewire\Admin\SchoolInfo;
@@ -14,6 +15,8 @@ use App\Livewire\Shared\Profile;
 use App\Livewire\Shared\StudentReports;
 use App\Livewire\Student\MyCertificates;
 use App\Livewire\Student\StudentAssignments;
+use App\Livewire\Student\StudentCourses;
+use App\Livewire\Student\StudentSubjects;
 use App\Livewire\Student\StudentDashboard;
 use App\Livewire\Student\TakeQuiz;
 use App\Livewire\Student\ViewLearningMaterials;
@@ -31,6 +34,7 @@ use App\Livewire\Tutor\ReviewSubmissions;
 use App\Livewire\Tutor\TutorCourses;
 use App\Livewire\Tutor\TutorDashboard;
 use App\Livewire\Tutor\TutorStudents;
+use App\Livewire\Tutor\TutorSubjects;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -73,6 +77,9 @@ Route::middleware(['auth', 'admin'])
         Route::livewire('/courses', AdminCourses::class)
             ->name('admin.courses');
 
+        Route::livewire('/subjects', AdminSubjects::class)
+            ->name('admin.subjects');
+
         Route::livewire('/users', AdminUsers::class)
             ->name('admin.users');
 
@@ -82,7 +89,7 @@ Route::middleware(['auth', 'admin'])
         Route::livewire('/school-info', SchoolInfo::class)
             ->name('admin.school-info');
 
-        Route::livewire('/manage-marks/{course}', ManageMarks::class)
+        Route::livewire('/manage-marks/{subject}', ManageMarks::class)
             ->name('admin.manage-marks');
 
         Route::livewire('/reports', StudentReports::class)
@@ -104,6 +111,9 @@ Route::middleware(['auth', 'tutor'])
         Route::livewire('/courses', TutorCourses::class)
             ->name('tutor.courses');
 
+        Route::livewire('/subjects', TutorSubjects::class)
+            ->name('tutor.subjects');
+
         Route::livewire('/students', TutorStudents::class)
             ->name('tutor.students');
 
@@ -119,7 +129,7 @@ Route::middleware(['auth', 'tutor'])
         Route::livewire('/review-attempt/{attempt}', ReviewAttempt::class)
             ->name('tutor.review-attempt');
 
-        Route::livewire('/materials/{course_id?}', ManageLearningMaterials::class)
+        Route::livewire('/materials/{subject_id?}', ManageLearningMaterials::class)
             ->name('tutor.materials');
 
         Route::livewire('/assignments', ManageAssignments::class)
@@ -128,7 +138,7 @@ Route::middleware(['auth', 'tutor'])
         Route::livewire('/assignment-submissions/{assignment}', ReviewSubmissions::class)
             ->name('tutor.assignment-submissions');
 
-        Route::livewire('/manage-marks/{course}', ManageMarks::class)
+        Route::livewire('/manage-marks/{subject}', ManageMarks::class)
             ->name('tutor.manage-marks');
 
         Route::livewire('/reports', StudentReports::class)
@@ -138,18 +148,24 @@ Route::middleware(['auth', 'tutor'])
 Route::middleware(['auth', 'student'])
     ->prefix('student')
     ->group(function (): void {
-        Route::livewire('/dashboard', StudentDashboard::class)
+        Route::livewire('/dashboard', StudentSubjects::class)
             ->name('student.dashboard');
+
+        Route::livewire('/subjects', StudentSubjects::class)
+            ->name('student.subjects');
+
+        Route::livewire('/courses', StudentCourses::class)
+            ->name('student.courses');
 
         Route::livewire('/profile', Profile::class)
             ->name('student.profile');
 
         Route::livewire('/quiz/{quiz}', TakeQuiz::class)->name('student.take-quiz');
 
-        Route::livewire('/materials/{course}', ViewLearningMaterials::class)
+        Route::livewire('/materials/{subject}', ViewLearningMaterials::class)
             ->name('student.view-materials');
 
-        Route::livewire('/assignments/{course}', StudentAssignments::class)
+        Route::livewire('/assignments/{subject}', StudentAssignments::class)
             ->name('student.assignments');
 
         Route::livewire('/my-marks', ViewMarks::class)

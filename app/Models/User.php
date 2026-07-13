@@ -67,9 +67,9 @@ class User extends Authenticatable
         return $this->belongsTo(School::class);
     }
 
-    public function courses(): BelongsToMany
+    public function subjects(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class);
+        return $this->belongsToMany(Subject::class, 'subject_user');
     }
 
     public function quizAttempts(): HasMany

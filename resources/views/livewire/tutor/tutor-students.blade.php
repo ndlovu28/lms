@@ -79,7 +79,7 @@
                                     </td>
                                     <td class="py-3">
                                         <div class="d-flex flex-wrap gap-2">
-                                            @foreach($student->courses as $course)
+                                            @foreach($student->subjects as $course)
                                                 <span class="badge bg-primary bg-opacity-10 text-primary px-2 py-1 rounded">
                                                     {{ $course->name }}
                                                     @if($course->phase)

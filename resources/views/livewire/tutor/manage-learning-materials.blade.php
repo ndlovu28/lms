@@ -32,13 +32,13 @@
                     <form wire:submit.prevent="save">
                         <div class="mb-3">
                             <label class="form-label text-body fw-medium">Course</label>
-                            <select class="form-select @error('course_id') is-invalid @enderror" wire:model.live="course_id">
+                            <select class="form-select @error('subject_id') is-invalid @enderror" wire:model.live="subject_id">
                                 <option value="">Select Course</option>
-                                @foreach($courses as $course)
-                                    <option value="{{ $course->id }}">{{ $course->phase->name.' - '.$course->name }}</option>
+                                @foreach($subjects as $subject)
+                                    <option value="{{ $subject->id }}">{{ $subject->course->name.' - '.$subject->name }}</option>
                                 @endforeach
                             </select>
-                            @error('course_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            @error('subject_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-3">
@@ -86,7 +86,7 @@
                             </div>
                         @endif
 
-                        <button type="submit" class="btn btn-primary w-100 py-2">
+                        <button type="submit" class="btn btn-primary w-100 py-2" wire:click.prevent="save">
                             <i class="ri-add-line me-1"></i> Add Material
                         </button>
                     </form>
@@ -98,7 +98,7 @@
             <div class="card bg-white border border-white rounded-10 shadow-sm">
                 <div class="card-body p-0">
                     <div class="p-4 border-bottom">
-                        <h3 class="fs-18 fw-medium mb-0 text-secondary">Existing Materials @if($course_id) for Selected Course @endif</h3>
+                        <h3 class="fs-18 fw-medium mb-0 text-secondary">Existing Materials @if($subject_id) for Selected Course @endif</h3>
                     </div>
                     @if(empty($materials))
                         <div class="text-center py-5">

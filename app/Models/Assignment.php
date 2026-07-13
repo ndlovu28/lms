@@ -14,7 +14,7 @@ class Assignment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'course_id',
+        'subject_id',
         'tutor_id',
         'title',
         'description',
@@ -27,9 +27,9 @@ class Assignment extends Model
         'due_date' => 'datetime',
     ];
 
-    public function course(): BelongsTo
+    public function subject(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Subject::class);
     }
 
     public function tutor(): BelongsTo
