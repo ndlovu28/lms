@@ -46,7 +46,7 @@
                             <label class="form-label text-body fw-medium">Course (Optional)</label>
                             <select class="form-select @error('courseId') is-invalid @enderror" wire:model="courseId">
                                 <option value="">Select Course</option>
-                                @foreach($courses as $course)
+                                @foreach($subjects as $course)
                                     <option value="{{ $course->id }}">{{ $course->name }}</option>
                                 @endforeach
                             </select>

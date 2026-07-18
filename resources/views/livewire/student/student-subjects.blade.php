@@ -32,7 +32,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h4 class="mb-1 fs-20 fw-bold">{{ Auth::user()->school->name }}</h4>
-                            <p class="text-muted mb-0">You are currently enrolled in {{ $courses->count() }} {{ Str::plural('course', $courses->count()) }}.</p>
+                            <p class="text-muted mb-0">You are currently enrolled in {{ $subjects->count() }} {{ Str::plural('subject', $subjects->count()) }}.</p>
                         </div>
                     </div>
                 </div>
@@ -40,27 +40,28 @@
         </div>
     </div>
 
-    @foreach($courses as $course)
+    @foreach($subjects as $subject)
         <div class="card bg-white border border-white rounded-10 mb-4 overflow-hidden">
             <div class="card-header bg-light border-0 py-3">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div>
-                        <h5 class="mb-1 fs-18 fw-bold text-secondary">{{ $course->name }}</h5>
+                        <h5 class="mb-1 fs-18 fw-bold text-secondary">{{ $subject->name }}</h5>
                         <div class="d-flex align-items-center gap-3">
-                            <span class="small text-muted"><i class="ri-stack-line me-1"></i>Phase: {{ $course->phase?->name ?? 'N/A' }}</span>
-                            <span class="small text-muted"><i class="ri-user-star-line me-1"></i>Tutor: {{ $course->tutor?->name ?? 'N/A' }} {{ $course->tutor?->surname ?? '' }}</span>
+                            <span class="small text-muted"><i class="ri-stack-line me-1"></i>Course: {{ $subject->course?->name ?? 'N/A' }}</span>
+                            <span class="small text-muted"><i class="ri-stack-line me-1"></i>Phase: {{ $subject->course->phase?->name ?? 'N/A' }}</span>
+                            <span class="small text-muted"><i class="ri-user-star-line me-1"></i>Tutor: {{ $subject->tutor?->name ?? 'N/A' }} {{ $subject->tutor?->surname ?? '' }}</span>
                         </div>
                     </div>
                     <div class="d-flex gap-2 flex-wrap">
-                        @if($course->activeSession)
-                            <a href="{{ $course->activeSession->join_url }}" target="_blank" class="btn btn-success btn-sm px-3">
+                        @if($subject->activeSession)
+                            <a href="{{ $subject->activeSession->join_url }}" target="_blank" class="btn btn-success btn-sm px-3">
                                 <i class="ri-video-chat-line me-1"></i> Join Live Session
                             </a>
                         @endif
-                        <a href="{{ route('student.view-materials', $course->id) }}" class="btn btn-primary btn-sm px-3">
+                        <a href="{{ route('student.view-materials', $subject->id) }}" class="btn btn-primary btn-sm px-3">
                             <i class="ri-book-open-line me-1"></i> Study Materials
                         </a>
-                        <a href="{{ route('student.assignments', $course->id) }}" class="btn btn-outline-primary btn-sm px-3">
+                        <a href="{{ route('student.assignments', $subject->id) }}" class="btn btn-outline-primary btn-sm px-3">
                             <i class="ri-edit-box-line me-1"></i> Assignments
                         </a>
                     </div>
@@ -68,9 +69,9 @@
             </div>
             <div class="card-body p-4">
                 <h6 class="text-uppercase text-muted small fw-bold mb-4">Quizzes Overview</h6>
-                @if($course->quizzes->isEmpty())
+                @if($subject->quizzes->isEmpty())
                     <div class="alert alert-light border-0 py-3 mb-0">
-                        <p class="text-muted mb-0"><i class="ri-information-line me-2"></i>No quizzes available for this course yet.</p>
+                        <p class="text-muted mb-0"><i class="ri-information-line me-2"></i>No quizzes available for this subject yet.</p>
                     </div>
                 @else
                     <div class="table-responsive">
@@ -85,7 +86,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($course->quizzes as $quiz)
+                                @foreach($subject->quizzes as $quiz)
                                     @php
                                         $attempt = $attempts->get($quiz->id)?->first();
                                     @endphp
@@ -131,11 +132,11 @@
         </div>
     @endforeach
 
-    @if($courses->isEmpty())
+    @if($subjects->isEmpty())
         <div class="card bg-white border border-white rounded-10">
             <div class="card-body text-center py-5">
                 <i class="ri-book-2-line fs-48 text-light mb-3 d-block"></i>
-                <p class="text-muted mb-0">You are not enrolled in any courses yet.</p>
+                <p class="text-muted mb-0">You are not enrolled in any subjects yet.</p>
             </div>
         </div>
     @endif

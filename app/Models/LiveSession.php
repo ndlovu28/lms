@@ -11,7 +11,7 @@ class LiveSession extends Model
     use HasFactory;
 
     protected $fillable = [
-        'course_id',
+        'subject_id',
         'tutor_id',
         'meeting_id',
         'topic',
@@ -28,9 +28,9 @@ class LiveSession extends Model
         ];
     }
 
-    public function course(): BelongsTo
+    public function subject(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Subject::class);
     }
 
     public function tutor(): BelongsTo

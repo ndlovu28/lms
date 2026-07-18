@@ -2,27 +2,30 @@
 
 namespace App\Livewire\Student;
 
-use App\Models\Course;
+use App\Models\Subject;
 use App\Models\LearningMaterial;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ViewLearningMaterials extends Component
 {
-    public Course $course;
+    public $course = [];
     public $selectedMaterial = null;
+    public $cur_id;
 
-    public function mount(Course $course)
+    public function mount($subject)
     {
         // Check if student is enrolled in the course
-        if (!Auth::user()->courses->contains($course->id)) {
-            abort(403, 'You are not enrolled in this course.');
-        }
+        // if (!Auth::user()->subjects->contains($course->id)) {
+            // abort(403, 'You are not enrolled in this course.');
+        // }
+        $course = Subject::find($subject);
+        $this->cur_id = $subject;
 
         $this->course = $course;
         
         // Auto-select the first material if it exists
-        $firstMaterial = LearningMaterial::where('course_id', $course->id)->orderBy('created_at', 'asc')->first();
+        $firstMaterial = LearningMaterial::where('subject_id', $subject)->orderBy('created_at', 'asc')->first();
         if ($firstMaterial) {
             $this->selectedMaterial = $firstMaterial;
         }
@@ -36,7 +39,7 @@ class ViewLearningMaterials extends Component
 
     public function render()
     {
-        $materials = LearningMaterial::where('course_id', $this->course->id)
+        $materials = LearningMaterial::where('subject_id', $this->cur_id)
             ->orderBy('created_at', 'asc')
             ->get();
 

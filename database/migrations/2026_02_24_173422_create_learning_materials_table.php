@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('learning_materials', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
+            $table->foreignId('subject_id')->constrained('subjects')->onDelete('cascade');
             $table->foreignId('tutor_id')->constrained('users')->onDelete('cascade');
             $table->string('title');
             $table->enum('type', ['text', 'video', 'file']);

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('quizzes', function (Blueprint $header) {
             $header->id();
             $header->foreignId('tutor_id')->constrained('users')->onDelete('cascade');
-            $header->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $header->foreignId('subject_id')->constrained('subjects')->onDelete('cascade');
             $header->string('name');
             $header->timestamps();
         });

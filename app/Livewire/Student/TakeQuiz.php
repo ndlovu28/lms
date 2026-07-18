@@ -21,9 +21,9 @@ class TakeQuiz extends Component
         $this->quiz = $quiz;
 
         // Check if student is enrolled in the course
-        if (!Auth::user()->courses->contains($quiz->course_id)) {
-            abort(403, 'You are not enrolled in this course.');
-        }
+        // if (!Auth::user()->subjects->contains($quiz->course_id)) {
+            // abort(403, 'You are not enrolled in this course.');
+        // }
 
         // Find or create an incomplete attempt
         $this->attempt = QuizAttempt::firstOrCreate(

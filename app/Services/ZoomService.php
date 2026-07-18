@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Course;
+use App\Models\Subject;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
@@ -49,13 +49,13 @@ class ZoomService
     }
 
     /**
-     * Create a Zoom meeting for a course.
+     * Create a Zoom meeting for a subject.
      */
-    public function createMeeting(Course $course): array
+    public function createMeeting(Subject $subject): array
     {
         $response = Http::withToken($this->getAccessToken())
             ->post("{$this->baseUrl}users/me/meetings", [
-                'topic' => "Live Session: {$course->name}",
+                'topic' => "Live Session: {$subject->course->name} - {$subject->name}",
                 'type' => 2, // Scheduled meeting
                 'start_time' => now()->toIso8601String(),
                 'duration' => 60,

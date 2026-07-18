@@ -4,7 +4,6 @@ namespace App\Livewire\Admin;
 
 use App\Models\Course;
 use App\Models\Phase;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -18,64 +17,45 @@ class AdminCourses extends Component
 
     public ?int $phaseId = null;
 
-    public ?int $filterPhaseId = null;
-
-    public ?int $tutorId = null;
+    public $show_form = false;
 
     public function render()
     {
-        $schoolId = $this->currentSchoolId();
+        $schoolId = Auth::user()->school_id;
+
+        $coursesQuery = Course::query()
+            ->with('phase')
+            ->latest();
 
         $phases = Phase::query()
             ->where('school_id', $schoolId)
             ->orderBy('name')
             ->get();
 
-        $tutors = User::query()
-            ->where('school_id', $schoolId)
-            ->whereHas('role', function ($query): void {
-                $query->where('name', 'tutor');
-            })
-            ->orderBy('name')
-            ->get();
-
-        $coursesQuery = Course::query()
-            ->where('school_id', $schoolId)
-            ->with(['phase', 'tutor'])
-            ->latest();
-
-        if ($this->filterPhaseId) {
-            $coursesQuery->where('phase_id', $this->filterPhaseId);
-        }
-
         return view('livewire.admin.admin-courses', [
-            'phases' => $phases,
-            'tutors' => $tutors,
             'courses' => $coursesQuery->get(),
+            'phases' => $phases,
         ]);
-    }
-
-    public function updatedFilterPhaseId(): void
-    {
-        // Trigger re-render when filter changes.
     }
 
     public function startCreate(): void
     {
         $this->resetForm();
+        $this->dispatch('show-course-modal');
     }
 
     public function startEdit(int $courseId): void
     {
         $course = Course::query()
-            ->where('school_id', $this->currentSchoolId())
             ->findOrFail($courseId);
 
         $this->editingCourseId = $course->id;
         $this->name = $course->name;
         $this->description = $course->description;
         $this->phaseId = $course->phase_id;
-        $this->tutorId = $course->tutor_id;
+
+        $this->show_form = true;
+        $this->dispatch('show-course-modal');
 
         $this->resetErrorBag();
     }
@@ -86,40 +66,26 @@ class AdminCourses extends Component
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'phaseId' => ['required', 'integer', 'exists:phases,id'],
-            'tutorId' => ['required', 'integer', 'exists:users,id'],
         ]);
-
-        $schoolId = $this->currentSchoolId();
 
         if ($this->editingCourseId) {
             $course = Course::query()
-                ->where('school_id', $schoolId)
                 ->findOrFail($this->editingCourseId);
             $course->update([
-                'school_id' => $schoolId,
                 'name' => $this->name,
                 'description' => $this->description,
                 'phase_id' => $this->phaseId,
-                'tutor_id' => $this->tutorId,
             ]);
         } else {
             Course::query()->create([
-                'school_id' => $schoolId,
                 'name' => $this->name,
                 'description' => $this->description,
                 'phase_id' => $this->phaseId,
-                'tutor_id' => $this->tutorId,
             ]);
         }
 
         $this->resetForm();
-    }
-
-    protected function currentSchoolId(): int
-    {
-        $user = Auth::user();
-
-        return (int) $user->school_id;
+        $this->dispatch('close-modal');
     }
 
     protected function resetForm(): void
@@ -128,7 +94,7 @@ class AdminCourses extends Component
         $this->name = '';
         $this->description = null;
         $this->phaseId = null;
-        $this->tutorId = null;
+        $this->show_form = false;
 
         $this->resetErrorBag();
     }

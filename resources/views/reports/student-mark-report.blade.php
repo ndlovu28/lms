@@ -106,7 +106,7 @@
         <p><strong>Date Generated:</strong> {{ $generatedAt }}</p>
     </div>
 
-    @forelse($marksByCourse as $courseId => $marks)
+    @forelse($marksBySubject as $courseId => $marks)
         <div class="course-section">
             <div class="course-title">{{ $marks->first()->course->name }}</div>
             <table>

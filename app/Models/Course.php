@@ -6,9 +6,7 @@ use Database\Factories\CourseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Course extends Model
 {
@@ -21,11 +19,9 @@ class Course extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'school_id',
-        'tutor_id',
-        'phase_id',
         'name',
         'description',
+        'phase_id',
     ];
 
     public function phase(): BelongsTo
@@ -33,48 +29,8 @@ class Course extends Model
         return $this->belongsTo(Phase::class);
     }
 
-    public function school(): BelongsTo
+    public function subjects(): HasMany
     {
-        return $this->belongsTo(School::class);
-    }
-
-    public function tutor(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'tutor_id');
-    }
-
-    public function students(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class);
-    }
-
-    public function quizzes(): HasMany
-    {
-        return $this->hasMany(Quiz::class);
-    }
-
-    public function learningMaterials(): HasMany
-    {
-        return $this->hasMany(LearningMaterial::class);
-    }
-
-    public function assignments(): HasMany
-    {
-        return $this->hasMany(Assignment::class);
-    }
-
-    public function liveSessions(): HasMany
-    {
-        return $this->hasMany(LiveSession::class);
-    }
-
-    public function marks(): HasMany
-    {
-        return $this->hasMany(Mark::class);
-    }
-
-    public function activeSession(): HasOne
-    {
-        return $this->hasOne(LiveSession::class)->where('is_active', true);
+        return $this->hasMany(Subject::class);
     }
 }

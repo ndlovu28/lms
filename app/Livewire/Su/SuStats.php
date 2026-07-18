@@ -10,6 +10,7 @@ use App\Models\Quiz;
 use App\Models\QuizAttempt;
 use App\Models\Role;
 use App\Models\School;
+use App\Models\Subject;
 use App\Models\User;
 use Livewire\Component;
 
@@ -26,6 +27,7 @@ class SuStats extends Component
             'tutorsCount' => User::where('role_id', $roles['tutor'] ?? 0)->count(),
             'studentsCount' => User::where('role_id', $roles['student'] ?? 0)->count(),
             'totalCourses' => Course::count(),
+            'totalSubjects' => Subject::count(),
             'totalQuizzes' => Quiz::count(),
             'totalAttempts' => QuizAttempt::count(),
             'totalMaterials' => LearningMaterial::count(),

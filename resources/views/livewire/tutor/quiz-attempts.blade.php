@@ -27,7 +27,7 @@
                 </div>
                 <div>
                     <h3 class="fs-18 fw-semibold mb-1 text-secondary">{{ $quiz->name }}</h3>
-                    <p class="text-muted mb-0 small">Course: {{ $quiz->course->name }} | Total Questions: {{ $quiz->questions->count() }}</p>
+                    <p class="text-muted mb-0 small">Course: {{ $quiz->subject->name }} | Total Questions: {{ $quiz->questions->count() }}</p>
                 </div>
             </div>
         </div>

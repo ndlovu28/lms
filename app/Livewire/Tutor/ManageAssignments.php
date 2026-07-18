@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Tutor;
 
-use App\Models\Course;
 use App\Models\Assignment;
+use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -13,14 +13,18 @@ class ManageAssignments extends Component
 {
     use WithFileUploads;
 
-    public $course_id;
+    public $subject_id;
+
     public $title;
+
     public $description;
+
     public $due_date;
+
     public $file;
 
     protected $rules = [
-        'course_id' => 'required|exists:courses,id',
+        'subject_id' => 'required|exists:subjects,id',
         'title' => 'required|string|max:255',
         'description' => 'required|string',
         'due_date' => 'required|after:now',
@@ -32,7 +36,7 @@ class ManageAssignments extends Component
         $this->validate();
 
         $data = [
-            'course_id' => $this->course_id,
+            'subject_id' => $this->subject_id,
             'tutor_id' => Auth::id(),
             'title' => $this->title,
             'description' => $this->description,
@@ -68,15 +72,15 @@ class ManageAssignments extends Component
 
     public function render()
     {
-        $courses = Course::where('tutor_id', Auth::id())->get();
+        $subjects = Subject::where('tutor_id', Auth::id())->get();
         $assignments = [];
-        
-        if ($this->course_id) {
-            $assignments = Assignment::where('course_id', $this->course_id)->orderBy('due_date', 'asc')->get();
+
+        if ($this->subject_id) {
+            $assignments = Assignment::where('subject_id', $this->subject_id)->orderBy('due_date', 'asc')->get();
         }
 
         return view('livewire.tutor.manage-assignments', [
-            'courses' => $courses,
+            'subjects' => $subjects,
             'assignments' => $assignments,
         ]);
     }

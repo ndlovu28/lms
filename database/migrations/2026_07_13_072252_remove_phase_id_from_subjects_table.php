@@ -11,12 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subject_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->timestamps();
-        });
+        // No action needed as phase_id is already removed from create_subjects_table
     }
 
     /**
@@ -24,6 +19,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subject_user');
+        Schema::table('subjects', function (Blueprint $table) {
+            // $table->foreignId('phase_id')->constrained()->cascadeOnDelete();
+        });
     }
 };

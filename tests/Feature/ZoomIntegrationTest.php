@@ -2,13 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Livewire\Student\StudentDashboard;
-use App\Livewire\Tutor\TutorCourses;
+use App\Livewire\Student\StudentSubjects;
+use App\Livewire\Tutor\TutorSubjects;
 use App\Models\Course;
 use App\Models\LiveSession;
 use App\Models\Phase;
 use App\Models\Role;
 use App\Models\School;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -23,7 +24,7 @@ class ZoomIntegrationTest extends TestCase
 
     protected User $student;
 
-    protected Course $course;
+    protected Subject $subject;
 
     protected function setUp(): void
     {
@@ -45,13 +46,15 @@ class ZoomIntegrationTest extends TestCase
 
         $phase = Phase::factory()->create(['school_id' => $school->id]);
 
-        $this->course = Course::factory()->create([
+        $course = Course::factory()->create();
+
+        $this->subject = Subject::factory()->create([
             'school_id' => $school->id,
+            'course_id' => $course->id,
             'tutor_id' => $this->tutor->id,
-            'phase_id' => $phase->id,
         ]);
 
-        $this->course->students()->attach($this->student->id);
+        $this->subject->students()->attach($this->student->id);
     }
 
     public function test_tutor_can_start_live_session(): void
@@ -60,7 +63,7 @@ class ZoomIntegrationTest extends TestCase
             'zoom.us/oauth/token*' => Http::response(['access_token' => 'fake-token'], 200),
             'api.zoom.us/v2/users/me/meetings' => Http::response([
                 'id' => '123456789',
-                'topic' => 'Live Session: '.$this->course->name,
+                'topic' => 'Live Session: '.$this->subject->course->name.' - '.$this->subject->name,
                 'start_url' => 'https://zoom.us/s/123456789',
                 'join_url' => 'https://zoom.us/j/123456789',
                 'password' => '123456',
@@ -68,13 +71,13 @@ class ZoomIntegrationTest extends TestCase
         ]);
 
         Livewire::actingAs($this->tutor)
-            ->test(TutorCourses::class)
-            ->call('startLiveSession', $this->course->id)
+            ->test(TutorSubjects::class)
+            ->call('startLiveSession', $this->subject->id)
             ->assertHasNoErrors()
             ->assertSee('Live session started successfully.');
 
         $this->assertDatabaseHas('live_sessions', [
-            'course_id' => $this->course->id,
+            'subject_id' => $this->subject->id,
             'tutor_id' => $this->tutor->id,
             'meeting_id' => '123456789',
             'is_active' => true,
@@ -84,7 +87,7 @@ class ZoomIntegrationTest extends TestCase
     public function test_tutor_can_end_live_session(): void
     {
         LiveSession::create([
-            'course_id' => $this->course->id,
+            'subject_id' => $this->subject->id,
             'tutor_id' => $this->tutor->id,
             'meeting_id' => '123456789',
             'topic' => 'Test Topic',
@@ -94,13 +97,13 @@ class ZoomIntegrationTest extends TestCase
         ]);
 
         Livewire::actingAs($this->tutor)
-            ->test(TutorCourses::class)
-            ->call('endLiveSession', $this->course->id)
+            ->test(TutorSubjects::class)
+            ->call('endLiveSession', $this->subject->id)
             ->assertHasNoErrors()
             ->assertSee('Live session ended.');
 
         $this->assertDatabaseHas('live_sessions', [
-            'course_id' => $this->course->id,
+            'subject_id' => $this->subject->id,
             'is_active' => false,
         ]);
     }
@@ -108,7 +111,7 @@ class ZoomIntegrationTest extends TestCase
     public function test_student_sees_join_button_when_session_is_active(): void
     {
         LiveSession::create([
-            'course_id' => $this->course->id,
+            'subject_id' => $this->subject->id,
             'tutor_id' => $this->tutor->id,
             'meeting_id' => '123456789',
             'topic' => 'Test Topic',
@@ -118,7 +121,7 @@ class ZoomIntegrationTest extends TestCase
         ]);
 
         Livewire::actingAs($this->student)
-            ->test(StudentDashboard::class)
+            ->test(StudentSubjects::class)
             ->assertSee('Join Live Session')
             ->assertSee('http://join');
     }
@@ -126,7 +129,7 @@ class ZoomIntegrationTest extends TestCase
     public function test_student_does_not_see_join_button_when_session_is_inactive(): void
     {
         LiveSession::create([
-            'course_id' => $this->course->id,
+            'subject_id' => $this->subject->id,
             'tutor_id' => $this->tutor->id,
             'meeting_id' => '123456789',
             'topic' => 'Test Topic',
@@ -136,7 +139,7 @@ class ZoomIntegrationTest extends TestCase
         ]);
 
         Livewire::actingAs($this->student)
-            ->test(StudentDashboard::class)
+            ->test(StudentSubjects::class)
             ->assertDontSee('Join Live Session');
     }
 }

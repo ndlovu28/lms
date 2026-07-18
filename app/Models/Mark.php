@@ -11,7 +11,7 @@ class Mark extends Model
     use HasFactory;
 
     protected $fillable = [
-        'course_id',
+        'subject_id',
         'user_id',
         'title',
         'mark',
@@ -20,9 +20,9 @@ class Mark extends Model
         'created_by',
     ];
 
-    public function course(): BelongsTo
+    public function subject(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Subject::class);
     }
 
     public function student(): BelongsTo

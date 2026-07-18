@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Assignment;
-use App\Models\Course;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,7 +20,7 @@ class AssignmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'course_id' => Course::factory(),
+            'subject_id' => Subject::factory(),
             'tutor_id' => User::factory(),
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),

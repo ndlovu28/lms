@@ -2,16 +2,18 @@
 
 namespace App\Livewire\Tutor;
 
-use App\Models\Course;
-use App\Models\Quiz;
 use App\Models\Question;
+use App\Models\Quiz;
+use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class CreateQuiz extends Component
 {
     public string $name = '';
-    public $course_id = '';
+
+    public $subject_id = '';
+
     public array $questions = [];
 
     public function mount()
@@ -42,7 +44,7 @@ class CreateQuiz extends Component
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'course_id' => 'required|exists:courses,id',
+            'subject_id' => 'required|exists:subjects,id',
             'questions' => 'required|array|min:1',
             'questions.*.text' => 'required|string',
             'questions.*.option_a' => 'required|string',
@@ -54,7 +56,7 @@ class CreateQuiz extends Component
 
         $quiz = Quiz::create([
             'tutor_id' => Auth::id(),
-            'course_id' => $this->course_id,
+            'subject_id' => $this->subject_id,
             'name' => $this->name,
         ]);
 
@@ -69,10 +71,10 @@ class CreateQuiz extends Component
 
     public function render()
     {
-        $courses = Course::where('tutor_id', Auth::id())->get();
+        $subjects = Subject::where('tutor_id', Auth::id())->get();
 
         return view('livewire.tutor.create-quiz', [
-            'courses' => $courses,
+            'subjects' => $subjects,
         ]);
     }
 }

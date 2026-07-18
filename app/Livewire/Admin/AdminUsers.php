@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Course;
 use App\Models\Role;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -12,7 +12,7 @@ class AdminUsers extends Component
 {
     public string $tab = 'all';
 
-    public bool $showAssignCoursesModal = false;
+    public bool $showAssignSubjectsModal = false;
 
     public bool $showCreateUserModal = false;
 
@@ -33,7 +33,7 @@ class AdminUsers extends Component
     /**
      * @var array<int>
      */
-    public array $selectedCourseIds = [];
+    public array $selectedSubjectIds = [];
 
     public function render()
     {
@@ -64,10 +64,10 @@ class AdminUsers extends Component
             $users = $baseQuery->get();
         }
 
-        $coursesForAssign = collect();
+        $subjectsForAssign = collect();
 
-        if ($this->showAssignCoursesModal && $this->assignUserId !== null) {
-            $coursesForAssign = Course::query()
+        if ($this->showAssignSubjectsModal && $this->assignUserId !== null) {
+            $subjectsForAssign = Subject::query()
                 ->where('school_id', $schoolId)
                 ->orderBy('name')
                 ->get();
@@ -75,7 +75,7 @@ class AdminUsers extends Component
 
         return view('livewire.admin.admin-users', [
             'users' => $users,
-            'coursesForAssign' => $coursesForAssign,
+            'subjectsForAssign' => $subjectsForAssign,
             'roles' => Role::where('name', '!=', 'su')->get(),
         ]);
     }
@@ -144,7 +144,7 @@ class AdminUsers extends Component
         $user->save();
     }
 
-    public function openAssignCourses(int $userId): void
+    public function openAssignSubjects(int $userId): void
     {
         $user = User::query()
             ->where('school_id', $this->currentSchoolId())
@@ -152,7 +152,7 @@ class AdminUsers extends Component
             ->findOrFail($userId);
 
         if ($user->role?->name === 'tutor' && ! $user->tutor_approved) {
-            session()->flash('error', 'Cannot assign courses to an unapproved tutor.');
+            session()->flash('error', 'Cannot assign subjects to an unapproved tutor.');
 
             return;
         }
@@ -161,19 +161,19 @@ class AdminUsers extends Component
         $this->assignUserType = $user->role?->name;
 
         if ($this->assignUserType === 'tutor') {
-            $this->selectedCourseIds = Course::query()
+            $this->selectedSubjectIds = Subject::query()
                 ->where('school_id', $this->currentSchoolId())
                 ->where('tutor_id', $user->id)
                 ->pluck('id')
                 ->all();
         } else {
-            $this->selectedCourseIds = $user->courses()->pluck('courses.id')->all();
+            $this->selectedSubjectIds = $user->subjects()->pluck('subjects.id')->all();
         }
 
-        $this->showAssignCoursesModal = true;
+        $this->showAssignSubjectsModal = true;
     }
 
-    public function saveAssignedCourses(): void
+    public function saveAssignedSubjects(): void
     {
         if ($this->assignUserId === null || $this->assignUserType === null) {
             return;
@@ -187,31 +187,31 @@ class AdminUsers extends Component
             ->findOrFail($this->assignUserId);
 
         if ($this->assignUserType === 'tutor') {
-            Course::query()
+            Subject::query()
                 ->where('school_id', $schoolId)
                 ->where('tutor_id', $user->id)
-                ->whereNotIn('id', $this->selectedCourseIds)
+                ->whereNotIn('id', $this->selectedSubjectIds)
                 ->update(['tutor_id' => null]);
 
-            if (! empty($this->selectedCourseIds)) {
-                Course::query()
+            if (! empty($this->selectedSubjectIds)) {
+                Subject::query()
                     ->where('school_id', $schoolId)
-                    ->whereIn('id', $this->selectedCourseIds)
+                    ->whereIn('id', $this->selectedSubjectIds)
                     ->update(['tutor_id' => $user->id]);
             }
         } else {
-            $user->courses()->sync($this->selectedCourseIds);
+            $user->subjects()->sync($this->selectedSubjectIds);
         }
 
-        $this->showAssignCoursesModal = false;
+        $this->showAssignSubjectsModal = false;
         $this->assignUserId = null;
         $this->assignUserType = null;
-        $this->selectedCourseIds = [];
+        $this->selectedSubjectIds = [];
     }
 
-    public function closeAssignCoursesModal(): void
+    public function closeAssignSubjectsModal(): void
     {
-        $this->showAssignCoursesModal = false;
+        $this->showAssignSubjectsModal = false;
     }
 
     protected function currentSchoolId(): int
