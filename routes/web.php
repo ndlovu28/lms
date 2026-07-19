@@ -37,6 +37,19 @@ use App\Livewire\Tutor\TutorStudents;
 use App\Livewire\Tutor\TutorSubjects;
 use Illuminate\Support\Facades\Route;
 
+Route::get('test',function(){
+    $school = \App\Models\School::find(1);
+    $student = \App\Models\User::find(24);
+    $certificate = \App\Models\Certificate::find(1);
+    $data = [
+        'school' => $school,
+        'student' => $student,
+        'certificate' => $certificate,
+
+    ];
+    return view('reports.certificate-template', $data);
+});
+
 Route::get('/', function () {
     return redirect('/auth/login');
 })->name('login');

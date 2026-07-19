@@ -11,7 +11,7 @@ class MyCertificates extends Component
 {
     public function downloadCertificate($id)
     {
-        $certificate = Certificate::with(['student', 'course', 'student.school'])->findOrFail($id);
+        $certificate = Certificate::with(['student', 'student.school'])->findOrFail($id);
 
         // Ensure student can only download their own
         if ($certificate->user_id !== Auth::id()) {
@@ -34,7 +34,7 @@ class MyCertificates extends Component
     public function render()
     {
         $certificates = Certificate::where('user_id', Auth::id())
-            ->with(['course', 'issuer'])
+            // ->with(['subjects', 'issuer'])
             ->latest()
             ->get();
 
